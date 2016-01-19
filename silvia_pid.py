@@ -32,7 +32,7 @@ I=0.01
 D=10.
 
 pid = PID.PID(P,I,D)
-pid.SetPoint=settemp
+pid.SetPoint = settemp
 pid.setSampleTime(sampletime)
 
 i=0
@@ -63,7 +63,7 @@ try:
     if pidout >= 100 :
       gpio.output(boilerpin,1)
       print 'boiler: on'
-    elif pidout > 0 and pidout < 100 and tempf < 201. :
+    elif pidout > 0 and pidout < 100 and tempf < settemp * 1.01 :
       if i%10 == 0 :
         j=int(pidout)/10
       if i%10 <= j :
