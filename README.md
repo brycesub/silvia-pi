@@ -13,6 +13,6 @@ sudo reboot
 
 After the reboot:
 ````
-sudo git clone https://github.com/brycesub/silvia-pi.git /root/
-sudo /root/setup.sh
+sudo git clone https://github.com/brycesub/silvia-pi.git /root/silvia-pi
+sudo /root/silvia-pi/setup.sh
 ````
