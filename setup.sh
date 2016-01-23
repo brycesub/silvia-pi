@@ -27,7 +27,8 @@ echo "0 0 * * * reboot" >> /var/spool/cron/crontabs/root
 
 echo "Adding entry to /etc/rc.local"
 cp /etc/rc.local /etc/rc.local.bak
-cat /etc/rc.local | sed 's|exit 0|/root/silvia-pi/silvia_pid.py > /root/silvia-pi/silvia_pi.log 2>\&1 \&\n\nexit 0|g' > /etc/rc.local.new
+cat /etc/rc.local | sed 's|^exit 0$|/root/silvia-pi/silvia_pid.py > /root/silvia-pi/silvia_pi.log 2>\&1 \&\n\nexit 0|g' > /etc/rc.local.new
 mv /etc/rc.local.new /etc/rc.local
+chmod 755 /etc/rc.local
 
 echo "Installation complete.  Please reboot."
