@@ -7,7 +7,7 @@ sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get -y install rpi-update git build-essential python-dev python-smbus python-pip
 sudo rpi-update
-sudo echo "dtparam=spi=on" >> /boot/config.txt
+sudo bash -c 'echo "dtparam=spi=on" >> /boot/config.txt'
 sudo reboot
 ````
 
