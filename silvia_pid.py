@@ -27,6 +27,8 @@ pid.setSampleTime(conf.sample_time)
 
 i=0
 j=0
+pidhist = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.]
+avgpid = 0
 
 # mainLoop
 try:
@@ -49,14 +51,17 @@ try:
 
     pid.update(tempf)
     pidout = pid.output
+    pidhist[i%10] = pidout
+    avgpid = sum(pidhist)/len(pidhist)
     print 'pidout:',pidout
+    print 'avgpid:',avgpid
 
-    if pidout >= 100 :
+    if avgpid >= 100 :
       rGPIO.output(conf.boiler_pin,1)
       print 'boiler: on'
-    elif pidout > 0 and pidout < 100 and tempf < conf.set_temp * 1.01 :
+    elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp * 1.01 :
       if i%10 == 0 :
-        j=int(pidout)/10
+        j=int(avgpid)/10
       if i%10 <= j :
         rGPIO.output(conf.boiler_pin,1)
         print 'boiler: on'

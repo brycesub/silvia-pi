@@ -8,7 +8,7 @@ spi_dev = 0
 boiler_pin=26
 
 # Default goal temperature
-set_temp = 201.
+set_temp = 200.
 
 # Main loop sample rate in seconds
 sample_time=0.1
