@@ -36,7 +36,9 @@ TODO
   * Full - https://downloads.raspberrypi.org/raspbian_latest
   * Lite (for smaller SD Cards) - https://downloads.raspberrypi.org/raspbian_lite_latest
 
-####Software Install Instructions
+Install Raspbian and configure wi-fi
+
+####silvia-pi Software Installation Instructions
 Execute on the pi bash shell:
 ````
 sudo apt-get -y update
