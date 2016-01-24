@@ -5,7 +5,7 @@ spi_port = 0
 spi_dev = 0
 
 # Pin # for relay connected to heating element
-boiler_pin = 26
+he_pin = 26
 
 # Default goal temperature
 set_temp = 200.
@@ -14,6 +14,6 @@ set_temp = 200.
 sample_time = 0.1
 
 # PID Proportional, Integral, and Derivative values
-P = 3.0
+P = 3.3
 I = 0.01
-D = 10.
+D = 5.

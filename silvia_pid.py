@@ -16,8 +16,8 @@ sensor = MAX31855.MAX31855(spi=SPI.SpiDev(conf.spi_port, conf.spi_dev))
 
 rGPIO = GPIO.get_platform_gpio()
 
-rGPIO.setup(conf.boiler_pin, GPIO.OUT)
-rGPIO.output(conf.boiler_pin,0)
+rGPIO.setup(conf.he_pin, GPIO.OUT)
+rGPIO.output(conf.he_pin,0)
 
 nanct=0
 
@@ -29,6 +29,9 @@ i=0
 j=0
 pidhist = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.]
 avgpid = 0
+hestat = 0
+
+print 'i,tempf,pidout,pidavg,hestat'
 
 # mainLoop
 try:
@@ -40,45 +43,38 @@ try:
       nanct += 1
 #     print ' nanct:',nanct
       if nanct > 100000 :
-        rGPIO.output(conf.boiler_pin,0)
+        rGPIO.output(conf.he_pin,0)
         break
       continue
     else:
       nanct = 0
-    print '  loop:',i
-#   print ' tempc:',tempc,'*C'
-    print ' tempf:',tempf,'*F'
 
     pid.update(tempf)
     pidout = pid.output
     pidhist[i%10] = pidout
     avgpid = sum(pidhist)/len(pidhist)
-    print 'pidout:',pidout
-    print 'avgpid:',avgpid
 
     if avgpid >= 100 :
-      rGPIO.output(conf.boiler_pin,1)
-      print 'boiler: on'
-    elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp * 1.01 :
+      hestat = 1
+    elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp * 1.02 :
       if i%10 == 0 :
         j=int(avgpid)/10
       if i%10 <= j :
-        rGPIO.output(conf.boiler_pin,1)
-        print 'boiler: on'
+        hestat = 1
       else :
-        rGPIO.output(conf.boiler_pin,0)
-        print 'boiler: off'
+        hestat = 0
     else:
-      rGPIO.output(conf.boiler_pin,0)
-      print 'boiler: off'
+      hestat = 0
 
-    print
+    rGPIO.output(conf.he_pin,hestat) 
+    
+    print i,tempf,pidout,avgpid,hestat
 
-    i+=1
+    i += 1
 
     time.sleep(conf.sample_time)
 
 finally:
   pid.clear
-  rGPIO.output(conf.boiler_pin,0)
+  rGPIO.output(conf.he_pin,0)
   rGPIO.cleanup()
