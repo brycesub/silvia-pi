@@ -27,6 +27,7 @@ A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing
     * Bare wire if using the Raspberry Pi Zero
 * 14 gage wire - For connecting the A/C side of the relay to the circuit
   * $5 - Hardware Store / Scrap
+    * Don't skimp here.  Remember this wire will be in close proximit to a ~240*F boiler
 
 ####Hardware Installation
 TODO
