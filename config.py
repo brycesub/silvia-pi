@@ -8,12 +8,12 @@ spi_dev = 0
 he_pin = 26
 
 # Default goal temperature
-set_temp = 200.
+set_temp = 221.
 
 # Main loop sample rate in seconds
 sample_time = 0.1
 
 # PID Proportional, Integral, and Derivative values
 P = 3.3
-I = 0.01
-D = 5.
+I = 0.04
+D = 2.5

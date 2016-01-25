@@ -31,7 +31,8 @@ pidhist = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.]
 avgpid = 0
 hestat = 0
 
-print 'i,tempf,pidout,pidavg,hestat'
+print 'P =',conf.P,'I =',conf.I,'D =',conf.D,'Set Temp =',conf.set_temp
+print 'i tempf pidout pidavg hestat'
 
 # mainLoop
 try:
