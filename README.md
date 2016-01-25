@@ -1,6 +1,17 @@
 #silvia-pi
 A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing PID temperature control.
 
+####Currently Implemented Features:
+* Brew temperature control
+
+####Planned Features:
+* Timed shots with pre-infusion
+* Steam temperature control
+* Digital pressure gauge
+* Programmable machine warm-up/wake-up
+* RESTful API for configuration, brewing, and machine wake-up
+* Web interface for displaying temperature, pressure, and other statistics.
+
 ####Hardware
 * Raspberry Pi 2
   * $35 - http://www.amazon.com/Raspberry-Pi-Model-Project-Board/dp/B00T2U7R7I
