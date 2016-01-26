@@ -32,7 +32,7 @@ avgpid = 0
 hestat = 0
 
 print 'P =',conf.P,'I =',conf.I,'D =',conf.D,'Set Temp =',conf.set_temp
-print 'i tempf pidout pidavg hestat'
+print 'i tempf pidout pidavg pterm iterm dterm hestat'
 
 # mainLoop
 try:
@@ -69,7 +69,7 @@ try:
 
     rGPIO.output(conf.he_pin,hestat) 
     
-    print i,tempf,pidout,avgpid,hestat
+    print i,round(tempf,2),round(pidout,2),round(avgpid,2),round(pid.PTerm,2),round(pid.ITerm,2),round(pid.DTerm,2),hestat
 
     i += 1
 
