@@ -15,5 +15,5 @@ sample_time = 0.1
 
 # PID Proportional, Integral, and Derivative values
 P = 3.3
-I = 0.04
-D = 2.5
+I = 0.02
+D = 5.

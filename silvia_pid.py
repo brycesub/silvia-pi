@@ -57,9 +57,9 @@ try:
 
     if avgpid >= 100 :
       hestat = 1
-    elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp * 1.02 :
+    elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp * 1.01 :
       if i%10 == 0 :
-        j=int(avgpid)/10
+        j=int((avgpid/10)+.5)
       if i%10 <= j :
         hestat = 1
       else :
@@ -69,7 +69,7 @@ try:
 
     rGPIO.output(conf.he_pin,hestat) 
     
-    print i,round(tempf,2),round(pidout,2),round(avgpid,2),round(pid.PTerm,2),round(pid.ITerm,2),round(pid.DTerm,2),hestat
+    print i,round(tempf,2),round(pidout,2),round(avgpid,2),round(pid.PTerm,2),round(pid.ITerm*conf.I,2),round(pid.DTerm*conf.D,2),hestat
 
     i += 1
 
