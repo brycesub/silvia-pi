@@ -14,6 +14,6 @@ set_temp = 221.
 sample_time = 0.1
 
 # PID Proportional, Integral, and Derivative values
-P = 3.3
+P = 3.5
 I = 0.02
 D = 5.
