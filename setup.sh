@@ -7,9 +7,6 @@ fi
 
 apt-get -y install rpi-update git build-essential python-dev python-smbus python-pip
 
-#echo "Installing bottle python web framework..."
-#pip install bottle
-
 echo "Installing Adafruit GPIO library..."
 cd ~
 git clone https://github.com/adafruit/Adafruit_Python_GPIO.git
