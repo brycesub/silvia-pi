@@ -17,3 +17,7 @@ sample_time = 0.1
 P = 2.8
 I = 0.02
 D = 7.
+
+#Web Server Options
+wwwdir = '/root/silvia-pi/www/'
+port = 8080

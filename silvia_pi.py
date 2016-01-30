@@ -91,14 +91,15 @@ def pid_loop(dummy,state):
 
 def rest_server(dummy,state):
   from bottle import route, run, template, get, post, request, static_file
+  import config as conf
 
   @route('/')
   def docroot():
-    return static_file('index.html','./www/')
+    return static_file('index.html',conf.wwwdir)
 
   @route('/<filename>')
   def servfile(filename):
-    return static_file(filename,'./www/')
+    return static_file(filename,conf.wwwdir)
 
   @route('/curtemp')
   def curtemp():
@@ -120,7 +121,7 @@ def rest_server(dummy,state):
   def allstats():
     return dict(state)
 
-  run(host='0.0.0.0',port=8080)
+  run(host='0.0.0.0',port=conf.port)
 
 if __name__ == '__main__':
   manager = Manager()
