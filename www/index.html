@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./minimal.css">
+    <script type="text/javascript" src="../smoothie.js"></script>
+    <script type="text/javascript">
+      var curtemp = new TimeSeries();
+      var settemp = new TimeSeries();
+      var settempm = new TimeSeries();
+      var settempp = new TimeSeries();
+      var xhttp = new XMLHttpRequest();
+      setInterval(function() {
+        xhttp.open("GET", "./allstats", false);
+        xhttp.send();
+        var resp = JSON.parse(xhttp.responseText);
+        curtemp.append(new Date().getTime(), resp.tempf);
+        settemp.append(new Date().getTime(), resp.settemp);
+        settempm.append(new Date().getTime(), resp.settemp-4);
+        settempp.append(new Date().getTime(), resp.settemp+4);
+      }, 200);
+      
+      function createTimeline() {
+        var chart = new SmoothieChart({grid:{verticalSections:3},minValueScale:1.05,maxValueScale:1.05}),
+          canvas = document.getElementById('chart'),
+          series = new TimeSeries();
+
+        chart.addTimeSeries(settemp, {lineWidth:1,strokeStyle:'#ffff00'});
+        chart.addTimeSeries(settempm, {lineWidth:1,strokeStyle:'#ffffff'});
+        chart.addTimeSeries(settempp, {lineWidth:1,strokeStyle:'#ffffff'});
+        chart.addTimeSeries(curtemp, {lineWidth:3,strokeStyle:'#ff0000'});
+        chart.streamTo(document.getElementById("chart"), 500);
+      }
+    </script>
+  </head>
+  <body onload="createTimeline()">
+    <h1>Silvia Pi</h1>
+    <canvas id="chart" width="1000" height="400">
+  </body>
+</html>
