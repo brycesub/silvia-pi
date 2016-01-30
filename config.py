@@ -16,7 +16,7 @@ sample_time = 0.1
 # PID Proportional, Integral, and Derivative values
 P = 2.8
 I = 0.02
-D = 7.
+D = 30.
 
 #Web Server Options
 wwwdir = '/root/silvia-pi/www/'

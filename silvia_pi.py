@@ -57,7 +57,7 @@ def pid_loop(dummy,state):
 
       if avgpid >= 100 :
         hestat = 1
-      elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp * 1.01 :
+      elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp :
         if i%10 == 0 :
           j=int((avgpid/10)+.5)
         if i%10 <= j :
