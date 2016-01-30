@@ -90,7 +90,15 @@ def pid_loop(dummy,state):
     rGPIO.cleanup()
 
 def rest_server(dummy,state):
-  from bottle import route, run, template, get, post, request
+  from bottle import route, run, template, get, post, request, static_file
+
+  @route('/')
+  def docroot():
+    return static_file('index.html','./www/')
+
+  @route('/<filename>')
+  def servfile(filename):
+    return static_file(filename,'./www/')
 
   @route('/curtemp')
   def curtemp():
