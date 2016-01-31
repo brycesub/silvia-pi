@@ -29,7 +29,9 @@ def pid_loop(dummy,state):
   i=0
   j=0
   pidhist = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.]
-  avgpid = 0
+  avgpid = 0.
+  temphist = [0.,0.,0.,0.,0.]
+  avgtemp = 0.
   hestat = 0
 
   print 'P =',conf.P,'I =',conf.I,'D =',conf.D,'Set Temp =',conf.set_temp
@@ -39,6 +41,8 @@ def pid_loop(dummy,state):
     while True : # Loops 10x/second
       tempc = sensor.readTempC()
       tempf = c_to_f(tempc)
+      temphist[i%5] = tempf
+      avgtemp = sum(temphist)/len(temphist)
 
       if math.isnan(tempc) :
         nanct += 1
@@ -50,7 +54,8 @@ def pid_loop(dummy,state):
       else:
         nanct = 0
 
-      pid.update(tempf)
+#     pid.update(tempf)
+      pid.update(avgtemp)
       pidout = pid.output
       pidhist[i%10] = pidout
       avgpid = sum(pidhist)/len(pidhist)
@@ -71,6 +76,7 @@ def pid_loop(dummy,state):
 
       state['i'] = i
       state['tempf'] = round(tempf,2)
+      state['avgtemp'] = round(avgtemp,2)
       state['pidval'] = round(pidout,2)
       state['avgpid'] = round(avgpid,2)
       state['pterm'] = round(pid.PTerm,2)
@@ -103,7 +109,7 @@ def rest_server(dummy,state):
 
   @route('/curtemp')
   def curtemp():
-    return str(state['tempf'])
+    return str(state['avgtemp'])
 
   @get('/settemp')
   def settemp():
