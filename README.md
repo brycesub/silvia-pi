@@ -48,7 +48,7 @@ TODO
   * Full - https://downloads.raspberrypi.org/raspbian_latest
   * Lite (for smaller SD Cards) - https://downloads.raspberrypi.org/raspbian_lite_latest
 
-Install Raspbian and configure wi-fi
+Install Raspbian and configure Wi-Fi and timezone.
 
 ####silvia-pi Software Installation Instructions
 Execute on the pi bash shell:
