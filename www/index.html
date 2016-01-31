@@ -9,6 +9,8 @@
       var settempm = new TimeSeries();
       var settempp = new TimeSeries();
       var xhttp = new XMLHttpRequest();
+      var curtempstr = "";
+      var settempstr = "";
       setInterval(function() {
         xhttp.open("GET", "./allstats", false);
         xhttp.send();
@@ -17,6 +19,8 @@
         settemp.append(new Date().getTime(), resp.settemp);
         settempm.append(new Date().getTime(), resp.settemp-4);
         settempp.append(new Date().getTime(), resp.settemp+4);
+        document.getElementById("curtemp").innerHTML = curtempstr.concat("<h3>Cur Temp: ",resp.tempf.toFixed(2),"</h3>");
+        document.getElementById("settemp").innerHTML = settempstr.concat("<h3>Set Temp: ",resp.settemp.toFixed(2),"</h3>");
       }, 200);
       
       function createTimeline() {
@@ -28,12 +32,16 @@
         chart.addTimeSeries(settempm, {lineWidth:1,strokeStyle:'#ffffff'});
         chart.addTimeSeries(settempp, {lineWidth:1,strokeStyle:'#ffffff'});
         chart.addTimeSeries(curtemp, {lineWidth:3,strokeStyle:'#ff0000'});
-        chart.streamTo(document.getElementById("chart"), 500);
+        chart.streamTo(document.getElementById("chart"), 200);
       }
     </script>
   </head>
+  <div class="container">
   <body onload="createTimeline()">
     <h1>Silvia Pi</h1>
-    <canvas id="chart" width="1000" height="400">
+    <canvas id="chart" width="1000" height="400"></canvas>
+    <div id="curtemp"><h3>00.00</h3></div>
+    <div id="settemp"><h3>00.00</h3></div>
+  </div>
   </body>
 </html>
