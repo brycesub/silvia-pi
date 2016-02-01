@@ -8,13 +8,6 @@ var dterm = new TimeSeries();
 var pidval = new TimeSeries();
 var avgpid = new TimeSeries();
 var xhttp = new XMLHttpRequest();
-var curtempstr = "";
-var settempstr = "";
-var ptermstr = "";
-var itermstr = "";
-var dtermstr = "";
-var pidvalstr = "";
-var avgpidstr = "";
 
 setInterval(function() {
   xhttp.open("GET", "./allstats", false);
@@ -29,13 +22,13 @@ setInterval(function() {
   dterm.append(new Date().getTime(), resp.dterm);
   pidval.append(new Date().getTime(), resp.pidval);
   avgpid.append(new Date().getTime(), resp.avgpid);
-  document.getElementById("curtemp").innerHTML = curtempstr.concat("<h3>Cur Temp: ",resp.tempf.toFixed(2),"</h3>");
-  document.getElementById("settemp").innerHTML = settempstr.concat("<h3>Set Temp: ",resp.settemp.toFixed(2),"</h3>");
-  document.getElementById("pterm").innerHTML = ptermstr.concat("<h3>P Term: ",resp.pterm.toFixed(2),"</h3>");
-  document.getElementById("iterm").innerHTML = itermstr.concat("<h3>I Term: ",resp.iterm.toFixed(2),"</h3>");
-  document.getElementById("dterm").innerHTML = dtermstr.concat("<h3>D Term: ",resp.dterm.toFixed(2),"</h3>");
-  document.getElementById("pidval").innerHTML = pidvalstr.concat("<h3>Pid Val: ",resp.pidval.toFixed(2),"</h3>");
-  document.getElementById("avgpid").innerHTML = avgpidstr.concat("<h3>Pid Avg: ",resp.avgpid.toFixed(2),"</h3>");
+  document.getElementById("curtemp").innerHTML = resp.tempf.toFixed(2);
+  document.getElementById("settemp").innerHTML = resp.settemp.toFixed(2);
+  document.getElementById("pterm").innerHTML = resp.pterm.toFixed(2);
+  document.getElementById("iterm").innerHTML = resp.iterm.toFixed(2);
+  document.getElementById("dterm").innerHTML = resp.dterm.toFixed(2);
+  document.getElementById("pidval").innerHTML = resp.pidval.toFixed(2);
+  document.getElementById("avgpid").innerHTML = resp.avgpid.toFixed(2);
 }, 200);
 
 function createTimeline() {
