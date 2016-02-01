@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import os
 
 # Raspberry Pi SPI Port and Device
 spi_port = 0
