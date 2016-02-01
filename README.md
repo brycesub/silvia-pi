@@ -67,4 +67,4 @@ sudo git clone https://github.com/brycesub/silvia-pi.git /root/silvia-pi
 sudo /root/silvia-pi/setup.sh
 ````
 This last step will download the necessariy python libraries and install the silvia-pi software in /root/silvia-pi
-It also creates a cron entry to reboot your pi at midnight (root's crontab) and startup the silvia-pi on boot (/etc/rc.local entry).
+It also creates an entry in /etc/rc.local to start the software on every boot.
