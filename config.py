@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import os
 
 # Raspberry Pi SPI Port and Device
 spi_port = 0
@@ -18,6 +19,6 @@ P = 3.3
 I = 0.15
 D = 12.5
 
-#Web Server Options
-wwwdir = '/root/silvia-pi/www/'
+basedir = os.path.dirname(__file__)
+wwwdir = basedir+'/www/'
 port = 8080
