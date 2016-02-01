@@ -97,6 +97,7 @@ def pid_loop(dummy,state):
 
 def rest_server(dummy,state):
   from bottle import route, run, template, get, post, request, static_file
+  from subprocess import call
   import config as conf
 
   @route('/')
@@ -126,6 +127,11 @@ def rest_server(dummy,state):
   @route('/allstats')
   def allstats():
     return dict(state)
+
+  @route('/restart')
+  def restart():
+    call(["reboot"])
+    return '';
 
   run(host='0.0.0.0',port=conf.port)
 
