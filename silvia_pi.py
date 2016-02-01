@@ -95,14 +95,18 @@ def rest_server(dummy,state):
   from bottle import route, run, template, get, post, request, static_file
   from subprocess import call
   import config as conf
+  import os
+
+  basedir = os.path.dirname(__file__)
+  wwwdir = basedir+'/www/'
 
   @route('/')
   def docroot():
-    return static_file('index.html',conf.wwwdir)
+    return static_file('index.html',wwwdir)
 
   @route('/<filename>')
   def servfile(filename):
-    return static_file(filename,conf.wwwdir)
+    return static_file(filename,wwwdir)
 
   @route('/curtemp')
   def curtemp():

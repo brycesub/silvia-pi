@@ -19,6 +19,4 @@ P = 3.3
 I = 0.15
 D = 12.5
 
-basedir = os.path.dirname(__file__)
-wwwdir = basedir+'/www/'
 port = 8080
