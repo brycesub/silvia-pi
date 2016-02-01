@@ -1,11 +1,9 @@
 #!/usr/bin/python
 
-from multiprocessing import Process, Manager
-
 def pid_loop(dummy,state):
-  import time
   import sys
-  import math
+  from time import sleep
+  from math import isnan
   import Adafruit_GPIO as GPIO
   import Adafruit_GPIO.SPI as SPI
   import Adafruit_MAX31855.MAX31855 as MAX31855
@@ -44,9 +42,8 @@ def pid_loop(dummy,state):
       temphist[i%5] = tempf
       avgtemp = sum(temphist)/len(temphist)
 
-      if math.isnan(tempc) :
+      if isnan(tempc) :
         nanct += 1
-#       print ' nanct:',nanct
         if nanct > 100000 :
           rGPIO.output(conf.he_pin,0)
           break
@@ -54,7 +51,6 @@ def pid_loop(dummy,state):
       else:
         nanct = 0
 
-#     pid.update(tempf)
       pid.update(avgtemp)
       pidout = pid.output
       pidhist[i%10] = pidout
@@ -88,7 +84,7 @@ def pid_loop(dummy,state):
       print state
 
       i += 1
-      time.sleep(conf.sample_time)
+      sleep(conf.sample_time)
 
   finally:
     pid.clear
@@ -133,17 +129,73 @@ def rest_server(dummy,state):
     call(["reboot"])
     return '';
 
+  @route('/healthcheck')
+  def healthcheck():
+    return 'OK';
+
   run(host='0.0.0.0',port=conf.port)
 
 if __name__ == '__main__':
+  from multiprocessing import Process, Manager
+  from time import sleep
+  from urllib2 import urlopen
+  import config
+
   manager = Manager()
   pidstate = manager.dict()
 
   p = Process(target=pid_loop,args=(1,pidstate))
+  p.daemon = True
   p.start()
 
   r = Process(target=rest_server,args=(1,pidstate))
+  r.daemon = True
   r.start()
 
-  p.join()
-  r.join()
+  #Start Watchdog loop
+  piderr = 0
+  weberr = 0
+  weberrflag = 0
+  urlhc = 'http://localhost:'+str(config.port)+'/healthcheck'
+
+  sleep(3)
+  lasti = pidstate['i']
+  sleep(1)
+
+  while True:
+    curi = pidstate['i']
+    if curi == lasti :
+      piderr = piderr + 1
+    else :
+      piderr = 0
+
+    lasti = curi
+
+    if piderr > 9 :
+      print 'ERROR IN PID THREAD, RESTARTING'
+      p.kill()
+      sleep(2)
+      p.run()
+      sleep(2)
+
+    try:
+      hc = urlopen(urlhc,timeout=2)
+    except:
+      weberrflag = 1
+    else:
+      if hc.getcode() != 200 :
+        weberrflag = 1
+
+    if weberrflag != 0 :
+      weberr = weberr + 1
+
+    if weberr > 9 :
+      print 'ERROR IN WEB SERVER THREAD, RESTARTING'
+      r.kill()
+      sleep(2)
+      r.run()
+      sleep(2)
+
+    weberrflag = 0
+
+    sleep(1)
