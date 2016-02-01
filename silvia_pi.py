@@ -173,7 +173,7 @@ if __name__ == '__main__':
 
     if piderr > 9 :
       print 'ERROR IN PID THREAD, RESTARTING'
-      p.kill()
+      p.terminate()
       sleep(2)
       p.run()
       sleep(2)
@@ -191,7 +191,7 @@ if __name__ == '__main__':
 
     if weberr > 9 :
       print 'ERROR IN WEB SERVER THREAD, RESTARTING'
-      r.kill()
+      r.terminate()
       sleep(2)
       r.run()
       sleep(2)
