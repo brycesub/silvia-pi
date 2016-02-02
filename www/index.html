@@ -4,21 +4,22 @@
     <title>Silvia Pi</title>
     <link rel="stylesheet" href="./minimal.css">
     <script type="text/javascript" src="./smoothie.js"></script>
+    <script type="text/javascript" src="./jquery.js"></script>
     <script type="text/javascript" src="./index.js"></script>
   </head>
   <div class="container">
-  <body onload="createTimeline()">
+  <body>
     <h1>Silvia Pi</h1>
     <canvas id="chart" width="1000" height="400"></canvas>
     <h3>Cur Temp: <span id="curtemp">00.00</span></h3>
     <h3>Set Temp: <span id="settemp">00.00</span></h3>
-    <p><button id="toggleadv" onclick="toggleAdv()">Show Advanced Stats</button></p>
-    <canvas class="adv" id="pidchart" style="visibility:hidden;" width="1000" height="350"></canvas>
-    <h3 class="adv" style="visibility:hidden;">P Term: <span id="pterm">00.00</span></h3>
-    <h3 class="adv" style="visibility:hidden;">I Term: <span id="iterm">00.00</span></h3>
-    <h3 class="adv" style="visibility:hidden;">D Term: <span id="dterm">00.00</span></h3>
-    <h3 class="adv" style="visibility:hidden;">Pid Val: <span id="pidval">00.00</span></h3>
-    <h3 class="adv" style="visibility:hidden;">Pid Avg: <span id="avgpid">00.00</span></h3>
+    <p><button id="toggleadv">Show Advanced Stats</button></p>
+    <canvas class="adv" id="pidchart" width="1000" height="350"></canvas>
+    <h3 class="adv">P Term: <span id="pterm">00.00</span></h3>
+    <h3 class="adv">I Term: <span id="iterm">00.00</span></h3>
+    <h3 class="adv">D Term: <span id="dterm">00.00</span></h3>
+    <h3 class="adv">Pid Val: <span id="pidval">00.00</span></h3>
+    <h3 class="adv">Pid Avg: <span id="avgpid">00.00</span></h3>
   </div>
   </body>
 </html>
