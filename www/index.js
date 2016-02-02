@@ -7,6 +7,7 @@ var iterm = new TimeSeries();
 var dterm = new TimeSeries();
 var pidval = new TimeSeries();
 var avgpid = new TimeSeries();
+var lastreqdone = 1;
 
 $(document).ready(function(){
   $(".adv").hide();
@@ -17,28 +18,32 @@ $(document).ready(function(){
 });
 
 setInterval(function() {
-  $.getJSON({
-    url: "/allstats",
-    success: function ( resp ) {
-      curtemp.append(new Date().getTime(), resp.tempf);
-      settemp.append(new Date().getTime(), resp.settemp);
-      settempm.append(new Date().getTime(), resp.settemp-4);
-      settempp.append(new Date().getTime(), resp.settemp+4);
-      pterm.append(new Date().getTime(), resp.pterm);
-      iterm.append(new Date().getTime(), resp.iterm);
-      dterm.append(new Date().getTime(), resp.dterm);
-      pidval.append(new Date().getTime(), resp.pidval);
-      avgpid.append(new Date().getTime(), resp.avgpid);
-      $("#curtemp").html(resp.tempf.toFixed(2));
-      $("#settemp").html(resp.settemp.toFixed(2));
-      $("#pterm").html(resp.pterm.toFixed(2));
-      $("#iterm").html(resp.iterm.toFixed(2));
-      $("#dterm").html(resp.dterm.toFixed(2));
-      $("#pidval").html(resp.pidval.toFixed(2));
-      $("#avgpid").html(resp.avgpid.toFixed(2));
-    }
-  });
-}, 250);
+  if (lastreqdone == 1) {
+    $.getJSON({
+      url: "/allstats",
+      success: function ( resp ) {
+        curtemp.append(new Date().getTime(), resp.tempf);
+        settemp.append(new Date().getTime(), resp.settemp);
+        settempm.append(new Date().getTime(), resp.settemp-4);
+        settempp.append(new Date().getTime(), resp.settemp+4);
+        pterm.append(new Date().getTime(), resp.pterm);
+        iterm.append(new Date().getTime(), resp.iterm);
+        dterm.append(new Date().getTime(), resp.dterm);
+        pidval.append(new Date().getTime(), resp.pidval);
+        avgpid.append(new Date().getTime(), resp.avgpid);
+        $("#curtemp").html(resp.tempf.toFixed(2));
+        $("#settemp").html(resp.settemp.toFixed(2));
+        $("#pterm").html(resp.pterm.toFixed(2));
+        $("#iterm").html(resp.iterm.toFixed(2));
+        $("#dterm").html(resp.dterm.toFixed(2));
+        $("#pidval").html(resp.pidval.toFixed(2));
+        $("#avgpid").html(resp.avgpid.toFixed(2));
+        lastreqdone = 1;
+      }
+    });
+    lastreqdone = 0;
+  }
+}, 100);
 
 function createTimeline() {
   var chart = new SmoothieChart({grid:{verticalSections:3},minValueScale:1.05,maxValueScale:1.05}),
