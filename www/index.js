@@ -10,10 +10,11 @@ var avgpid = new TimeSeries();
 var lastreqdone = 1;
 
 $(document).ready(function(){
-  $(".adv").hide();
   createTimeline();
+
+  $(".adv").hide();
   $("#toggleadv").click(function(){
-  $(".adv").toggle();
+    $(".adv").toggle();
   });
 });
 
@@ -43,21 +44,17 @@ setInterval(function() {
     });
     lastreqdone = 0;
   }
-}, 100);
+}, 200);
 
 function createTimeline() {
-  var chart = new SmoothieChart({grid:{verticalSections:3},minValueScale:1.05,maxValueScale:1.05}),
-    canvas = document.getElementById('chart'),
-    series = new TimeSeries();
+  var chart = new SmoothieChart({grid:{verticalSections:3},minValueScale:1.05,maxValueScale:1.05});
   chart.addTimeSeries(settemp, {lineWidth:1,strokeStyle:'#ffff00'});
   chart.addTimeSeries(settempm, {lineWidth:1,strokeStyle:'#ffffff'});
   chart.addTimeSeries(settempp, {lineWidth:1,strokeStyle:'#ffffff'});
   chart.addTimeSeries(curtemp, {lineWidth:3,strokeStyle:'#ff0000'});
   chart.streamTo(document.getElementById("chart"), 500);
 
-  var pidchart = new SmoothieChart({grid:{verticalSections:3},minValueScale:1.05,maxValueScale:1.05}),
-    canvas = document.getElementById('pidchart'),
-    series = new TimeSeries();
+  var pidchart = new SmoothieChart({grid:{verticalSections:3},minValueScale:1.05,maxValueScale:1.05});
   pidchart.addTimeSeries(pterm, {lineWidth:2,strokeStyle:'#ff0000'});
   pidchart.addTimeSeries(iterm, {lineWidth:2,strokeStyle:'#00ff00'});
   pidchart.addTimeSeries(dterm, {lineWidth:2,strokeStyle:'#0000ff'});
