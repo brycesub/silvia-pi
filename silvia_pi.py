@@ -92,7 +92,7 @@ def pid_loop(dummy,state):
     rGPIO.cleanup()
 
 def rest_server(dummy,state):
-  from bottle import route, run, template, get, post, request, static_file
+  from bottle import route, run, get, post, request, static_file
   from subprocess import call
   import config as conf
   import os
