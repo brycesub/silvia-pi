@@ -104,13 +104,9 @@ def rest_server(dummy,state):
   def docroot():
     return static_file('index.html',wwwdir)
 
-  @route('/<filename>')
-  def servfile(filename):
-    return static_file(filename,wwwdir)
-
-  @route('/<dir>/<filename>')
-  def servfile(dir, filename):
-    return static_file(filename,wwwdir+dir)
+  @route('/<filepath:path>')
+  def servfile(filepath):
+    return static_file(filepath,wwwdir)
 
   @route('/curtemp')
   def curtemp():
