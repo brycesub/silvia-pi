@@ -110,7 +110,7 @@ def rest_server(dummy,state):
 
   @route('/<dir>/<filename>')
   def servfile(dir, filename):
-    return static_file(filename,wwwdir+'/'+dir)
+    return static_file(filename,wwwdir+dir)
 
   @route('/curtemp')
   def curtemp():
