@@ -22,7 +22,7 @@ setInterval(function() {
   if (lastreqdone == 1) {
     $.getJSON({
       url: "/allstats",
-      timeout: 700,
+      timeout: 500,
       success: function ( resp ) {
         curtemp.append(new Date().getTime(), resp.tempf);
         settemp.append(new Date().getTime(), resp.settemp);
