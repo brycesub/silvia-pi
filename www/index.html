@@ -1,25 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Silvia Pi</title>
-    <link rel="stylesheet" href="./minimal.css">
-    <script type="text/javascript" src="./smoothie.js"></script>
-    <script type="text/javascript" src="./jquery.js"></script>
-    <script type="text/javascript" src="./index.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="./js/smoothie.js"></script>
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/index.js"></script>
   </head>
   <body>
   <div class="container">
     <h1>Silvia Pi</h1>
     <canvas id="chart" width="1000" height="400"></canvas>
-    <h3>Cur Temp: <span id="curtemp">00.00</span></h3>
-    <h3>Set Temp: <span id="settemp">00.00</span></h3>
-    <p><button id="toggleadv">Show Advanced Stats</button></p>
+    <div class="row">
+      <div class="col-md-3"><p><button id="toggleadv" class="btn btn-info">Show Advanced Stats</button></p></div>
+      <div class="col-md-3" align="right"><h4>Set Temp: <span id="settemp">00.00</span></h4></div>
+      <div class="col-md-3" align="right"><h4>Cur Temp: <span id="curtemp">00.00</span></h4></div>
+    </div>
     <canvas class="adv" id="pidchart" width="1000" height="350"></canvas>
-    <h3 class="adv">P Term: <span id="pterm">00.00</span></h3>
-    <h3 class="adv">I Term: <span id="iterm">00.00</span></h3>
-    <h3 class="adv">D Term: <span id="dterm">00.00</span></h3>
-    <h3 class="adv">Pid Val: <span id="pidval">00.00</span></h3>
-    <h3 class="adv">Pid Avg: <span id="avgpid">00.00</span></h3>
+    <div class="row">
+      <div class="col-md-2"><p></p></div>
+      <div class="col-md-2"><h4 class="adv">P Term: <span id="pterm">00.00</span></h4></div>
+      <div class="col-md-2"><h4 class="adv">I Term: <span id="iterm">00.00</span></h4></div>
+      <div class="col-md-2"><h4 class="adv">D Term: <span id="dterm">00.00</span></h4></div>
+      <div class="col-md-2"><h4 class="adv">Pid Val: <span id="pidval">00.00</span></h4></div>
+      <div class="col-md-2"><h4 class="adv">Pid Avg: <span id="avgpid">00.00</span></h4></div>
+    </div>
   </div>
   </body>
 </html>
