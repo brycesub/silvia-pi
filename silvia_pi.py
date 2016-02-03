@@ -108,6 +108,10 @@ def rest_server(dummy,state):
   def servfile(filename):
     return static_file(filename,wwwdir)
 
+  @route('/<dir>/<filename>')
+  def servfile(dir, filename):
+    return static_file(filename,wwwdir+'/'+dir)
+
   @route('/curtemp')
   def curtemp():
     return str(state['avgtemp'])
