@@ -22,6 +22,7 @@ setInterval(function() {
   if (lastreqdone == 1) {
     $.getJSON({
       url: "/allstats",
+      timeout: 700,
       success: function ( resp ) {
         curtemp.append(new Date().getTime(), resp.tempf);
         settemp.append(new Date().getTime(), resp.settemp);
@@ -39,6 +40,8 @@ setInterval(function() {
         $("#dterm").html(resp.dterm.toFixed(2));
         $("#pidval").html(resp.pidval.toFixed(2));
         $("#avgpid").html(resp.avgpid.toFixed(2));
+      },
+      complete: function () {
         lastreqdone = 1;
       }
     });

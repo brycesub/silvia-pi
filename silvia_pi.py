@@ -137,7 +137,7 @@ def rest_server(dummy,state):
   def healthcheck():
     return 'OK';
 
-  run(host='0.0.0.0',port=conf.port)
+  run(host='0.0.0.0',port=conf.port,server='cherrypy')
 
 if __name__ == '__main__':
   from multiprocessing import Process, Manager

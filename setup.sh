@@ -24,6 +24,9 @@ cd ~
 git clone https://github.com/ivmech/ivPID.git
 cp ~/ivPID/PID.py ~/silvia-pi/
 
+echo "Installing cherrypy microframework"
+pip install cherrypy
+
 echo "Adding entry to /etc/rc.local"
 cp /etc/rc.local /etc/rc.local.bak
 cat /etc/rc.local | sed 's|^exit 0$|/root/silvia-pi/silvia_pi.py > /root/silvia-pi/silvia_pi.log 2>\&1 \&\n\nexit 0|g' > /etc/rc.local.new
