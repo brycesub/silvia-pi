@@ -47,7 +47,7 @@ setInterval(function() {
     });
     lastreqdone = 0;
   }
-}, 200);
+}, 100);
 
 function createTimeline() {
   var chart = new SmoothieChart({grid:{verticalSections:3},minValueScale:1.05,maxValueScale:1.05});
