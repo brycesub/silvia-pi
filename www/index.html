@@ -9,16 +9,26 @@
     <link rel="stylesheet" href="./css/bootstrap-theme.css">
     <script type="text/javascript" src="./js/smoothie.js"></script>
     <script type="text/javascript" src="./js/jquery.js"></script>
-    <!-- <script type="text/javascript" src="./js/bootstrap.js"></script> -->
+    <script type="text/javascript" src="./js/bootstrap.js"></script>
     <script type="text/javascript" src="./js/index.js"></script>
   </head>
   <body>
   <div class="container">
     <h1>Silvia Pi <small>Dashboard</small></h1>
-    <div class="center-block" align="center">
-      <div class="col-md-12"><canvas id="chart" width="970" height="400"></canvas></div>
-      <div class="row" style="width:1000px" align="center">
-        <div class="col-md-2"><p class="text-left"><button id="toggleadv" class="btn btn-info">Show Advanced Stats</button></p></div>
+    <div class="center-block" style="width:970px !important;">
+      <div class="row">
+        <div class="col-md-12">
+          <canvas id="chart" width="970" height="400"></canvas>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h4 class="text-right">Cur Tmp: <span id="curtemp">00.00</span></h4>
+          <h4 class="text-right">Set Tmp: <span id="settemp">00.00</span></h4>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
         <div class="col-md-4">
           <form class="form-inline" onsubmit="return false">
             <div class="form-group">
@@ -40,21 +50,21 @@
             <button id="btnSnooze" class="btn btn-primary">Snooze</button>
           </form>
         </div>
-        <div class="col-md-2">
-          <h4 class="text-right">Cur Tmp: <span id="curtemp">00.00</span></h4>
-          <h4 class="text-right">Set Tmp: <span id="settemp">00.00</span></h4>
-        </div>
+        <div class="col-md-4"><p class="text-left"><button id="toggleadv" class="btn btn-info">Adv Stats</button></p></div>
       </div>
     </div>
-    <div class="center-block" align="center">
-      <div class="col-md-12"><canvas class="adv" id="pidchart" width="970" height="350"></canvas></div>
-      <div class="row" style="width:1000px" align="center">
-        <div class="col-md-2"><h4 class="adv text-center">PID Stats:</h4></div>
-        <div class="col-md-2"><h4 class="adv text-center">P Term: <span id="pterm">00.00</span></h4></div>
-        <div class="col-md-2"><h4 class="adv text-center">I Term: <span id="iterm">00.00</span></h4></div>
-        <div class="col-md-2"><h4 class="adv text-center">D Term: <span id="dterm">00.00</span></h4></div>
-        <div class="col-md-2"><h4 class="adv text-center">Pid Val: <span id="pidval">00.00</span></h4></div>
-        <div class="col-md-2"><h4 class="adv text-center">Pid Avg: <span id="avgpid">00.00</span></h4></div>
+    <div class="center-block" style="width:970px !important;">
+      <hr class="adv">
+      <div class="col-md-12">
+        <canvas class="adv" id="pidchart" width="970" height="350"></canvas>
+      </div>
+      <div class="row" style="width:970px !important;">
+        <div class="col-md-2"><h4 class="adv">PID Stats:</h4></div>
+        <div class="col-md-2"><h4 class="adv">P Term: <span id="pterm">00.00</span></h4></div>
+        <div class="col-md-2"><h4 class="adv">I Term: <span id="iterm">00.00</span></h4></div>
+        <div class="col-md-2"><h4 class="adv">D Term: <span id="dterm">00.00</span></h4></div>
+        <div class="col-md-2"><h4 class="adv">Pid Val: <span id="pidval">00.00</span></h4></div>
+        <div class="col-md-2"><h4 class="adv">Pid Avg: <span id="avgpid">00.00</span></h4></div>
       </div>
     </div>
   </div>
