@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Silvia Pi</title>
     <link rel="stylesheet" href="./css/bootstrap.css">
     <link rel="stylesheet" href="./css/bootstrap-theme.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="./js/smoothie.js"></script>
     <script type="text/javascript" src="./js/jquery.js"></script>
     <script type="text/javascript" src="./js/bootstrap.js"></script>
@@ -13,19 +15,27 @@
   <body>
   <div class="container">
     <h1>Silvia Pi - Dashboard</h1>
-    <canvas id="chart" width="1000" height="400"></canvas>
-    <div class="row">
-      <div class="col-md-3"><p><button id="toggleadv" class="btn btn-info">Show Advanced Stats</button></p></div>
-      <div class="col-md-3" align="right"><h4>Set Temp: <span id="settemp">00.00</span></h4></div>
-      <div class="col-md-3" align="right"><h4>Cur Temp: <span id="curtemp">00.00</span></h4></div>
+    <div class="center-block" align="center">
+      <div class="col-md-12"><canvas id="chart" width="970" height="400"></canvas></div>
+      <div class="row" style="width:1000px" align="center">
+        <div class="col-md-4"><p class="text-left"><button id="toggleadv" class="btn btn-info">Show Advanced Stats</button></p></div>
+        <div class="col-md-4"><p></p></div>
+        <div class="col-md-4">
+          <h4 class="text-right">Set Temp: <span id="settemp">00.00</span></h4>
+          <h4 class="text-right">Cur Temp: <span id="curtemp">00.00</span></h4>
+        </div>
+      </div>
     </div>
-    <canvas class="adv" id="pidchart" width="1000" height="350"></canvas>
-    <div class="row">
-      <div class="col-md-2"><h4 class="adv">P Term: <span id="pterm">00.00</span></h4></div>
-      <div class="col-md-2"><h4 class="adv">I Term: <span id="iterm">00.00</span></h4></div>
-      <div class="col-md-2"><h4 class="adv">D Term: <span id="dterm">00.00</span></h4></div>
-      <div class="col-md-2"><h4 class="adv">Pid Val: <span id="pidval">00.00</span></h4></div>
-      <div class="col-md-2"><h4 class="adv">Pid Avg: <span id="avgpid">00.00</span></h4></div>
+    <div class="center-block" align="center">
+      <div class="col-md-12"><canvas class="adv" id="pidchart" width="970" height="350"></canvas></div>
+      <div class="row" style="width:1000px" align="center">
+        <div class="col-md-2"><h4 class="adv text-center">PID Stats:</h4></div>
+        <div class="col-md-2"><h4 class="adv text-center">P Term: <span id="pterm">00.00</span></h4></div>
+        <div class="col-md-2"><h4 class="adv text-center">I Term: <span id="iterm">00.00</span></h4></div>
+        <div class="col-md-2"><h4 class="adv text-center">D Term: <span id="dterm">00.00</span></h4></div>
+        <div class="col-md-2"><h4 class="adv text-center">Pid Val: <span id="pidval">00.00</span></h4></div>
+        <div class="col-md-2"><h4 class="adv text-center">Pid Avg: <span id="avgpid">00.00</span></h4></div>
+      </div>
     </div>
   </div>
   </body>
