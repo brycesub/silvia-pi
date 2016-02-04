@@ -16,6 +16,23 @@ $(document).ready(function(){
   $("#toggleadv").click(function(){
     $(".adv").toggle();
   });
+
+  $.getJSON({
+    url: "/allstats",
+    timeout: 500,
+    success: function ( resp ) {
+      $("#inputSetTemp").val( resp.settemp );
+      //$("#inputSnooze").val( resp.snooze );
+    }
+  });
+
+  $("#btnSetTemp").click(function(){
+    //TODO
+  });
+
+  $("#btnSnooze").click(function(){
+    //TODO
+  });
 });
 
 setInterval(function() {
