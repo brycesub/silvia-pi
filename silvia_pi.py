@@ -20,7 +20,7 @@ def pid_loop(dummy,state):
   rGPIO.output(conf.he_pin,0)
 
   pid = PID.PID(conf.P,conf.I,conf.D)
-  pid.SetPoint = conf.set_temp
+  pid.SetPoint = state['settemp']
   pid.setSampleTime(conf.sample_time)
 
   nanct=0
@@ -31,6 +31,7 @@ def pid_loop(dummy,state):
   temphist = [0.,0.,0.,0.,0.]
   avgtemp = 0.
   hestat = 0
+  lastsettemp = state['settemp']
 
   print 'P =',conf.P,'I =',conf.I,'D =',conf.D,'Set Temp =',conf.set_temp
 
@@ -49,6 +50,10 @@ def pid_loop(dummy,state):
         continue
       else:
         nanct = 0
+
+      if state['settemp'] != lastsettemp :
+        pid.SetPoint = state['settemp']
+        lastsettemp = state['settemp']
 
       pid.update(avgtemp)
       pidout = pid.output
