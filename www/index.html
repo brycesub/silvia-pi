@@ -29,21 +29,29 @@
       </div>
       <hr>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-4">
           <form class="form-inline" onsubmit="return false">
             <div class="form-group">
               <label for="inputSetTemp">Brew Temp: </label>
-              <div class="input-group">
-                <input type="number" class="form-control" id="inputSetTemp" style="width:80px">
+              <div class="input-group" style="width:115px">
+                <input type="number" class="form-control" id="inputSetTemp">
                 <div class="input-group-addon">*F</div>
               </div>
               <button id="btnSetTemp" class="btn btn-primary">Set</button>
             </div>
+         </form>
+       </div>
+        <div class="col-md-6">
+          <form class="form-inline" onsubmit="return false">
             <div class="form-group">
-              <label for="inputSnooze"> Wakeup Timer: </label>
+              <label for="inputSnooze">Wakeup Timer: </label>
               <input type="time" class="form-control" id="inputSnooze" style="width:120px" value="07:00">
               <button id="btnSnooze" class="btn btn-primary">Snooze</button>
             </div>
+          </form>
+        </div>
+        <div class="col-md-2">
+          <form class="form-inline" onsubmit="return false">
             <div class="form-group">
               <button id="toggleadv" class="btn btn-info">Advanced Stats</button>
             </div>
