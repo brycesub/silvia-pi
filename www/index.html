@@ -29,28 +29,26 @@
       </div>
       <hr>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-12">
           <form class="form-inline" onsubmit="return false">
             <div class="form-group">
+              <label for="inputSetTemp">Brew Temp: </label>
               <div class="input-group">
                 <input type="number" class="form-control" id="inputSetTemp" style="width:80px">
                 <div class="input-group-addon">*F</div>
               </div>
+              <button id="btnSetTemp" class="btn btn-primary">Set</button>
             </div>
-            <button id="btnSetTemp" class="btn btn-primary">Set</button>
-          </form>
-        </div>
-        <div class="col-md-4">
-          <form class="form-inline" onsubmit="return false">
             <div class="form-group">
-              <div class="input-group">
-                <input type="time" class="form-control" id="inputSnooze" style="width:120px" value="07:00">
-              </div>
+              <label for="inputSnooze"> Wakeup Timer: </label>
+              <input type="time" class="form-control" id="inputSnooze" style="width:120px" value="07:00">
+              <button id="btnSnooze" class="btn btn-primary">Snooze</button>
             </div>
-            <button id="btnSnooze" class="btn btn-primary">Snooze</button>
+            <div class="form-group">
+              <button id="toggleadv" class="btn btn-info">Advanced Stats</button>
+            </div>
           </form>
         </div>
-        <div class="col-md-4"><p class="text-left"><button id="toggleadv" class="btn btn-info">Adv Stats</button></p></div>
       </div>
     </div>
     <div class="center-block" style="width:970px !important;">
