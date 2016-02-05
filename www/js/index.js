@@ -29,7 +29,10 @@ $(document).ready(function(){
   });
 
   $("#btnSetTemp").click(function(){
-    $.post("/settemp", { settemp: $("#inputSetTemp").val() } );
+    $.post(
+      "/settemp", 
+      { settemp: $("#inputSetTemp").val() } 
+    );
   });
 
   $("#btnSnooze").click(function(){
