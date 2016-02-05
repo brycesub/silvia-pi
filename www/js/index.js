@@ -10,6 +10,8 @@ var avgpid = new TimeSeries();
 var lastreqdone = 1;
 
 $(document).ready(function(){
+  //$(".setw").attr("width", $( document ).width() *.9 );
+
   createTimeline();
 
   $(".adv").hide();
