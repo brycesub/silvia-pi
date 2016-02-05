@@ -119,10 +119,21 @@ def rest_server(dummy,state):
   @post('/settemp')
   def post_settemp():
     settemp = request.forms.get('settemp')
-    if settemp > 200 and settemp < 265 :
+    if settemp >= 200 and settemp <= 260 :
       state['settemp'] = settemp
       return str(settemp)
     return str(-1)
+
+  @get('/snooze')
+  def get_snooze():
+    return str(state['snooze'])
+
+  @post('/snooze')
+  def post_snooze():
+    snooze = request.forms.get('snooze')
+    #do input validation
+    state['snooze'] = snooze
+    return 'OK'
 
   @route('/allstats')
   def allstats():
@@ -135,7 +146,7 @@ def rest_server(dummy,state):
 
   @route('/healthcheck')
   def healthcheck():
-    return 'OK';
+    return 'OK'
 
   run(host='0.0.0.0',port=conf.port,server='cherrypy')
 
@@ -147,6 +158,8 @@ if __name__ == '__main__':
 
   manager = Manager()
   pidstate = manager.dict()
+  pidstate['snooze'] = -1
+  pidstate['i'] = 0
 
   p = Process(target=pid_loop,args=(1,pidstate))
   p.daemon = True
@@ -162,7 +175,6 @@ if __name__ == '__main__':
   weberrflag = 0
   urlhc = 'http://localhost:'+str(config.port)+'/healthcheck'
 
-  sleep(3)
   lasti = pidstate['i']
   sleep(1)
 
@@ -178,7 +190,7 @@ if __name__ == '__main__':
     if piderr > 9 :
       print 'ERROR IN PID THREAD, RESTARTING'
       p.terminate()
-      sleep(2)
+      sleep(60)
       p.run()
       sleep(2)
 
