@@ -24,12 +24,12 @@ $(document).ready(function(){
     timeout: 500,
     success: function ( resp ) {
       $("#inputSetTemp").val( resp.settemp );
-      //$("#inputSnooze").val( resp.snooze );
+      $("#inputSnooze").val( resp.snooze );
     }
   });
 
   $("#btnSetTemp").click(function(){
-    //TODO
+    $.post("/settemp", { settemp: $("#inputSetTemp").val() } );
   });
 
   $("#btnSnooze").click(function(){

@@ -33,7 +33,6 @@ def pid_loop(dummy,state):
   hestat = 0
 
   print 'P =',conf.P,'I =',conf.I,'D =',conf.D,'Set Temp =',conf.set_temp
-  print 'i tempf pidout pidavg pterm iterm dterm hestat'
 
   try:
     while True : # Loops 10x/second
@@ -78,7 +77,6 @@ def pid_loop(dummy,state):
       state['pterm'] = round(pid.PTerm,2)
       state['iterm'] = round(pid.ITerm * conf.I,2)
       state['dterm'] = round(pid.DTerm * conf.D,2)
-      state['settemp'] = round(conf.set_temp,2)
       state['hestat'] = hestat
 
       print state
@@ -118,11 +116,14 @@ def rest_server(dummy,state):
 
   @post('/settemp')
   def post_settemp():
-    settemp = request.forms.get('settemp')
-    if settemp >= 200 and settemp <= 260 :
-      state['settemp'] = settemp
-      return str(settemp)
-    return str(-1)
+    try:
+      settemp = float(request.forms.get('settemp'))
+      if settemp >= 200 and settemp <= 260 :
+        state['settemp'] = settemp
+        print 'wedidit',settemp
+        return str(settemp)
+    except:
+      return str(-1)
 
   @get('/snooze')
   def get_snooze():
@@ -160,6 +161,7 @@ if __name__ == '__main__':
   pidstate = manager.dict()
   pidstate['snooze'] = -1
   pidstate['i'] = 0
+  pidstate['settemp'] = config.set_temp
 
   p = Process(target=pid_loop,args=(1,pidstate))
   p.daemon = True
