@@ -56,7 +56,6 @@ setInterval(function() {
         pidval.append(new Date().getTime(), resp.pidval);
         avgpid.append(new Date().getTime(), resp.avgpid);
         $("#curtemp").html(resp.tempf.toFixed(2));
-        $("#settemp").html(resp.settemp.toFixed(2));
         $("#pterm").html(resp.pterm.toFixed(2));
         $("#iterm").html(resp.iterm.toFixed(2));
         $("#dterm").html(resp.dterm.toFixed(2));
