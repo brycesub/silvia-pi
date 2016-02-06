@@ -36,22 +36,12 @@ def pid_loop(dummy,state):
 
   try:
     while True : # Loops 10x/second
-      """
       if state['snoozeon'] == True :
-        szto = ''
-        sztoday = datetime.now().replace(minute=szin.minute,hour=szin.hour,second=0,microsecond=0)
-        sztomorrow = sztoday+timedelta(days=1)
-        if sztoday > datetime.now() :
-          szto = sztoday
-        else:
-          szto = sztomorrow
-
-        if datetime.now() >= state['snoozeon'] :
+        now = datetime.now()
+        dt = datetime.strptime(state['snooze'],'%H:%M')
+        if dt.hour == now.hour and dt.minute == now.minute :
           state['snoozeon'] = False
-        else:
-          sleep(1)
-          continue
-      """
+
       tempc = sensor.readTempC()
       tempf = c_to_f(tempc)
       temphist[i%5] = tempf
@@ -75,14 +65,17 @@ def pid_loop(dummy,state):
       pidhist[i%10] = pidout
       avgpid = sum(pidhist)/len(pidhist)
 
-      if avgpid >= 100 :
-        hestat = 1
-      elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp :
-        if i%10 == 0 :
-          j=int((avgpid/10)+.5)
-        if i%10 <= j :
+      if state['snoozeon'] == False :
+        if avgpid >= 100 :
           hestat = 1
-        else :
+        elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp :
+          if i%10 == 0 :
+            j=int((avgpid/10)+.5)
+          if i%10 <= j :
+            hestat = 1
+          else :
+            hestat = 0
+        else:
           hestat = 0
       else:
         hestat = 0
@@ -112,6 +105,7 @@ def pid_loop(dummy,state):
 def rest_server(dummy,state):
   from bottle import route, run, get, post, request, static_file, abort
   from subprocess import call
+  from datetime import datetime
   import config as conf
   import os
 
@@ -154,7 +148,7 @@ def rest_server(dummy,state):
   def post_snooze():
     snooze = request.forms.get('snooze')
     try:
-      szin = datetime.strptime(snooze,'%H:%M')
+      datetime.strptime(snooze,'%H:%M')
     except:
       abort(400,'Invalid time format.')
     state['snoozeon'] = True
