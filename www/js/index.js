@@ -36,8 +36,12 @@ $(document).ready(function(){
   });
 
   $("#btnSnooze").click(function(){
-    //TODO
+    $.post(
+      "/snooze", 
+      { snooze: $("#inputSnooze").val() } 
+    );
   });
+
 });
 
 setInterval(function() {

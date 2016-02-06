@@ -3,6 +3,7 @@
 def pid_loop(dummy,state):
   import sys
   from time import sleep
+  from datetime import datetime, timedelta
   from math import isnan
   import Adafruit_GPIO as GPIO
   import Adafruit_GPIO.SPI as SPI
@@ -33,10 +34,24 @@ def pid_loop(dummy,state):
   hestat = 0
   lastsettemp = state['settemp']
 
-  print 'P =',conf.P,'I =',conf.I,'D =',conf.D,'Set Temp =',conf.set_temp
-
   try:
     while True : # Loops 10x/second
+      """
+      if state['snoozeon'] == True :
+        szto = ''
+        sztoday = datetime.now().replace(minute=szin.minute,hour=szin.hour,second=0,microsecond=0)
+        sztomorrow = sztoday+timedelta(days=1)
+        if sztoday > datetime.now() :
+          szto = sztoday
+        else:
+          szto = sztomorrow
+
+        if datetime.now() >= state['snoozeon'] :
+          state['snoozeon'] = False
+        else:
+          sleep(1)
+          continue
+      """
       tempc = sensor.readTempC()
       tempf = c_to_f(tempc)
       temphist[i%5] = tempf
@@ -95,7 +110,7 @@ def pid_loop(dummy,state):
     rGPIO.cleanup()
 
 def rest_server(dummy,state):
-  from bottle import route, run, get, post, request, static_file
+  from bottle import route, run, get, post, request, static_file, abort
   from subprocess import call
   import config as conf
   import os
@@ -125,10 +140,11 @@ def rest_server(dummy,state):
       settemp = float(request.forms.get('settemp'))
       if settemp >= 200 and settemp <= 260 :
         state['settemp'] = settemp
-        print 'wedidit',settemp
         return str(settemp)
+      else:
+        abort(400,'Set temp out of rante 200-260.')
     except:
-      return str(-1)
+      abort(400,'Invalid number for set temp.')
 
   @get('/snooze')
   def get_snooze():
@@ -137,9 +153,13 @@ def rest_server(dummy,state):
   @post('/snooze')
   def post_snooze():
     snooze = request.forms.get('snooze')
-    #do input validation
+    try:
+      szin = datetime.strptime(snooze,'%H:%M')
+    except:
+      abort(400,'Invalid time format.')
+    state['snoozeon'] = True
     state['snooze'] = snooze
-    return 'OK'
+    return str(snooze)
 
   @route('/allstats')
   def allstats():
@@ -160,13 +180,14 @@ if __name__ == '__main__':
   from multiprocessing import Process, Manager
   from time import sleep
   from urllib2 import urlopen
-  import config
+  import config as conf
 
   manager = Manager()
   pidstate = manager.dict()
-  pidstate['snooze'] = -1
+  pidstate['snooze'] = conf.snooze 
+  pidstate['snoozeon'] = False
   pidstate['i'] = 0
-  pidstate['settemp'] = config.set_temp
+  pidstate['settemp'] = conf.set_temp
 
   p = Process(target=pid_loop,args=(1,pidstate))
   p.daemon = True
@@ -180,7 +201,7 @@ if __name__ == '__main__':
   piderr = 0
   weberr = 0
   weberrflag = 0
-  urlhc = 'http://localhost:'+str(config.port)+'/healthcheck'
+  urlhc = 'http://localhost:'+str(conf.port)+'/healthcheck'
 
   lasti = pidstate['i']
   sleep(1)
