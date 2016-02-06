@@ -10,8 +10,6 @@ var avgpid = new TimeSeries();
 var lastreqdone = 1;
 
 $(document).ready(function(){
-  //$(".setw").attr("width", $( document ).width() *.9 );
-
   createTimeline();
 
   $(".adv").hide();
@@ -40,7 +38,16 @@ $(document).ready(function(){
       "/snooze", 
       { snooze: $("#inputSnooze").val() } 
     );
+    $("#btnSnooze").toggle();
+    $("#btnSnoozeC").toggle();
   });
+
+  $("#btnSnooze").click(function(){
+    //TODO Add Cancle Snooze API Call
+    $("#btnSnooze").toggle();
+    $("#btnSnoozeC").toggle();
+  });
+
 
 });
 
@@ -50,6 +57,13 @@ setInterval(function() {
       url: "/allstats",
       timeout: 500,
       success: function ( resp ) {
+        if (resp.snoozeon == "True") {
+          $("#btnSnooze").show();
+          $("#btnSnoozeC").hide();
+        } else {
+          $("#btnSnooze").hide();
+          $("#btnSnoozeC").show();
+        }
         curtemp.append(new Date().getTime(), resp.tempf);
         settemp.append(new Date().getTime(), resp.settemp);
         settempm.append(new Date().getTime(), resp.settemp-4);
