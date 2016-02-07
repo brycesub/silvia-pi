@@ -155,6 +155,11 @@ def rest_server(dummy,state):
     state['snooze'] = snooze
     return str(snooze)
 
+  @post('/resetsnooze')
+  def reset_snooze():
+    state['snoozeon'] = False
+    return str('OK')
+
   @route('/allstats')
   def allstats():
     return dict(state)

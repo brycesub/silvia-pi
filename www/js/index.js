@@ -34,18 +34,15 @@ $(document).ready(function(){
   });
 
   $("#btnSnooze").click(function(){
-    $.post(
-      "/snooze", 
-      { snooze: $("#inputSnooze").val() } 
-    );
-    $("#btnSnooze").toggle();
-    $("#btnSnoozeC").toggle();
+    $.post("/snooze",{ snooze: $("#inputSnooze").val() });
+    $("#btnSnooze").hide();
+    $("#btnSnoozeC").show();
   });
 
-  $("#btnSnooze").click(function(){
-    //TODO Add Cancle Snooze API Call
-    $("#btnSnooze").toggle();
-    $("#btnSnoozeC").toggle();
+  $("#btnSnoozeC").click(function(){
+    $.post("/resetsnooze");
+    $("#btnSnooze").show();
+    $("#btnSnoozeC").hide();
   });
 
 
@@ -57,12 +54,12 @@ setInterval(function() {
       url: "/allstats",
       timeout: 500,
       success: function ( resp ) {
-        if (resp.snoozeon == "True") {
-          $("#btnSnooze").show();
-          $("#btnSnoozeC").hide();
-        } else {
+        if (resp.snoozeon == true) {
           $("#btnSnooze").hide();
           $("#btnSnoozeC").show();
+        } else {
+          $("#btnSnooze").show();
+          $("#btnSnoozeC").hide();
         }
         curtemp.append(new Date().getTime(), resp.tempf);
         settemp.append(new Date().getTime(), resp.settemp);
