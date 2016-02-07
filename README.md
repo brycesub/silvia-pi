@@ -5,12 +5,12 @@ A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing
 * Brew temperature control
 * RESTful API
 * Web interface for displaying temperature and other statistics
+* Programmable machine warm-up/wake-up
 
 ####Planned Features:
-* Timed shots with pre-infusion
 * Steam temperature control
+* Timed shots with pre-infusion
 * Digital pressure gauge
-* Programmable machine warm-up/wake-up
 
 ####Hardware
 * Raspberry Pi 2
