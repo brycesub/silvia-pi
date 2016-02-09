@@ -27,10 +27,18 @@ function resettimer() {
 }
 
 function onresize() {
+    var h;
+    if ($(window).height()*.40 > 350 ) {
+      h = 350;
+    } else {
+      h = $(window).height()*.40;
+    }
+
     $("#chart").attr("width", $("#fullrow").width()-30);
-    $("#chart").attr("height", $(document).height()*.30);
+    $("#chart").attr("height", h);
     $("#pidchart").attr("width", $("#fullrow").width()-30);
-    $("#pidchart").attr("height", $(document).height()*.30);
+    $("#pidchart").attr("height", h);
+
     if ($(document).width() < 600) {
       $("#toggleadv").html("Adv Stats");
     } else {
