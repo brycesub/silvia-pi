@@ -26,10 +26,26 @@ function resettimer() {
   timeout = setTimeout(refreshinputs, 30000);
 }
 
+function onresize() {
+    $("#chart").attr("width", $("#fullrow").width()-30);
+    $("#chart").attr("height", $(document).height()*.30);
+    $("#pidchart").attr("width", $("#fullrow").width()-30);
+    $("#pidchart").attr("height", $(document).height()*.30);
+    if ($(document).width() < 600) {
+      $("#toggleadv").html("Adv Stats");
+    } else {
+      $("#toggleadv").html("Advanced Stats");
+    }
+}
+
 $(document).ready(function(){
-  resettimer;
+  resettimer();
   $(this).mousemove(resettimer);
   $(this).keypress(resettimer);
+
+  onresize();
+  $(window).resize(onresize);
+
   createTimeline();
 
   $(".adv").hide();

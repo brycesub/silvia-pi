@@ -15,32 +15,32 @@
   <body>
   <div class="container">
     <h1>Silvia Pi <small>Dashboard</small></h1>
-    <div class="center-block" style="width:970px !important;">
-      <div class="row">
-        <div class="col-md-12">
-          <canvas id="chart" width="970" height="400"></canvas>
+    <div class="center-block">
+      <div id="fullrow" class="row">
+        <div class="col-xs-12">
+          <canvas id="chart"></canvas>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
-          <h4 class="text-right">Current Temp: <span id="curtemp">00.00</span></h4>
+        <div class="col-xs-12">
+          <h5 class="text-right">Current Temp: <span id="curtemp">00.00</span></h5>
         </div>
       </div>
       <hr>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-xs-4">
           <form class="form-inline" onsubmit="return false">
             <div class="form-group">
               <label for="inputSetTemp">Brew Temp: </label>
               <div class="input-group" style="width:115px">
                 <input type="number" class="form-control" id="inputSetTemp">
-                <div class="input-group-addon">*F</div>
+                <div class="input-group-addon">°F</div>
               </div>
               <button id="btnSetTemp" class="btn btn-primary">Set</button>
             </div>
          </form>
        </div>
-        <div class="col-md-6">
+        <div class="col-xs-5">
           <form class="form-inline" onsubmit="return false">
             <div class="form-group">
               <label for="inputSnooze">Wakeup Timer: </label>
@@ -50,7 +50,7 @@
             </div>
           </form>
         </div>
-        <div class="col-md-2">
+        <div class="col-xs-3">
           <form class="form-inline" onsubmit="return false">
             <div class="form-group">
               <button id="toggleadv" class="btn btn-info">Advanced Stats</button>
@@ -59,20 +59,20 @@
         </div>
       </div>
     </div>
-    <div class="center-block adv" style="width:970px !important;">
+    <div class="center-block adv">
       <hr>
       <div class="row">
-        <div class="col-md-12">
-          <canvas id="pidchart" width="970" height="350"></canvas>
+        <div class="col-xs-12">
+          <canvas id="pidchart"></canvas>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-2"><h4>PID Stats:</h4></div>
-        <div class="col-md-2"><h4>P Term: <span id="pterm">00.00</span></h4></div>
-        <div class="col-md-2"><h4>I Term: <span id="iterm">00.00</span></h4></div>
-        <div class="col-md-2"><h4>D Term: <span id="dterm">00.00</span></h4></div>
-        <div class="col-md-2"><h4>Pid Val: <span id="pidval">00.00</span></h4></div>
-        <div class="col-md-2"><h4>Pid Avg: <span id="avgpid">00.00</span></h4></div>
+        <div class="col-xs-2"><h5>PID Stats:</h5></div>
+        <div class="col-xs-2"><h5>P Term: <span id="pterm">00.00</span></h5></div>
+        <div class="col-xs-2"><h5>I Term: <span id="iterm">00.00</span></h5></div>
+        <div class="col-xs-2"><h5>D Term: <span id="dterm">00.00</span></h5></div>
+        <div class="col-xs-2"><h5>Pid Val: <span id="pidval">00.00</span></h5></div>
+        <div class="col-xs-2"><h5>Pid Avg: <span id="avgpid">00.00</span></h5></div>
       </div>
     </div>
   </div>
