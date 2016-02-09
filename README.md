@@ -69,3 +69,52 @@ sudo /root/silvia-pi/setup.sh
 This last step will download the necessariy python libraries and install the silvia-pi software in /root/silvia-pi
 
 It also creates an entry in /etc/rc.local to start the software on every boot.
+
+####API Documentation
+
+#####GET /allstats
+Returns JSON of all the following statistics:
+* i : Current loop iterator value (increases 10x per second)
+* tempf : Temperature in Fahrenheit
+* avgtemp : Average temperature over the last 10 cycles (1 second) in Fahrenheit
+* settemp : Current set (goal) temperature in Fahrenheit
+* hestat : 0 if heating element is currently off, 1 if heating element is currently on
+* pidval : PID output from the last cycle
+* avgpid : Average PID output over the last 10 cycles (1 second)
+* pterm : PID P Term value (Proportional error)
+* iterm : PID I Term value (Integral error)
+* dterm : PID D Term value (Derivative error)
+* snooze : Current or last snooze time, a string in the format HH:MM (24 hour)
+* snoozeon : true if machine is currently snoozing, false if machine is not snoozing
+
+#####GET /curtemp
+Returns string of the current temperature in Fahrenheit
+
+#####GET /settemp
+Returns string of the current set (goal) temperature in Fahrenheit
+
+#####POST /settemp
+Expects one input 'settemp' with a value between 200-260
+Sets the set (goal) temperature in Fahrenheit
+Returns the set temp back or a 400 error if unsuccessful.
+
+#####GET /snooze
+Returns string of the current snooze time formatted "HH:MM" (24 hour).
+e.g. 13:00 if snoozing until 1:00 PM local time.
+If the snooze function is not currently enabled the function returns false.
+
+#####POST /snooze
+Expects one input 'snooze', a string in the format "HH:MM" (24 hour).
+This enables the snooze function, the machine will sleep until the time specified.
+Returns the snooze time set or 400 if passed an invalid input.
+
+#####POST /resetsnooze
+Disables/cancels the current snooze functionality.
+Returns true always.
+
+#####GET /restart
+Issues a reboot command to the Raspberry Pi.
+
+#####GET /healthcheck
+A simple healthcheck to see if the webserver thread is repsonding.
+Returns string 'OK'.
