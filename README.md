@@ -94,33 +94,26 @@ Returns string of the current temperature in Fahrenheit.
 Returns string of the current set (goal) temperature in Fahrenheit.
 
 #####POST /settemp
-Expects one input 'settemp' with a value between 200-260.
-
-Sets the set (goal) temperature in Fahrenheit.
-
+Expects one input 'settemp' with a value between 200-260.  
+Sets the set (goal) temperature in Fahrenheit.  
 Returns the set temp back or a 400 error if unsuccessful.
 
 #####GET /snooze
-Returns string of the current or last snooze time formatted "HH:MM" (24 hour).
-
+Returns string of the current or last snooze time formatted "HH:MM" (24 hour).  
 e.g. 13:00 if snoozing until 1:00 PM local time.
 
 #####POST /snooze
-Expects one input 'snooze', a string in the format "HH:MM" (24 hour).
-
-This enables the snooze function, the machine will sleep until the time specified.
-
+Expects one input 'snooze', a string in the format "HH:MM" (24 hour).  
+This enables the snooze function, the machine will sleep until the time specified.  
 Returns the snooze time set or 400 if passed an invalid input.
 
 #####POST /resetsnooze
-Disables/cancels the current snooze functionality.
-
+Disables/cancels the current snooze functionality.  
 Returns true always.
 
 #####GET /restart
 Issues a reboot command to the Raspberry Pi.
 
 #####GET /healthcheck
-A simple healthcheck to see if the webserver thread is repsonding.
-
+A simple healthcheck to see if the webserver thread is repsonding.  
 Returns string 'OK'.
