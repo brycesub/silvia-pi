@@ -136,13 +136,16 @@ def rest_server(dummy,state):
         state['settemp'] = settemp
         return str(settemp)
       else:
-        abort(400,'Set temp out of rante 200-260.')
+        abort(400,'Set temp out of range 200-260.')
     except:
       abort(400,'Invalid number for set temp.')
 
   @get('/snooze')
   def get_snooze():
-    return str(state['snooze'])
+    if state['snoozeon'] == True :
+      return str(state['snooze'])
+    else
+      return False
 
   @post('/snooze')
   def post_snooze():
@@ -158,7 +161,7 @@ def rest_server(dummy,state):
   @post('/resetsnooze')
   def reset_snooze():
     state['snoozeon'] = False
-    return str('OK')
+    return True
 
   @route('/allstats')
   def allstats():
