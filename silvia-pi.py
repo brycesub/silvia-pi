@@ -144,7 +144,7 @@ def rest_server(dummy,state):
   def get_snooze():
     if state['snoozeon'] == True :
       return str(state['snooze'])
-    else
+    else:
       return False
 
   @post('/snooze')
