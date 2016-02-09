@@ -8,15 +8,9 @@ var dterm = new TimeSeries();
 var pidval = new TimeSeries();
 var avgpid = new TimeSeries();
 var lastreqdone = 1;
+var timeout;
 
-$(document).ready(function(){
-  createTimeline();
-
-  $(".adv").hide();
-  $("#toggleadv").click(function(){
-    $(".adv").toggle();
-  });
-
+function refreshinputs() {
   $.getJSON({
     url: "/allstats",
     timeout: 500,
@@ -25,6 +19,25 @@ $(document).ready(function(){
       $("#inputSnooze").val( resp.snooze );
     }
   });
+}
+
+function resettimer() {
+  clearTimeout(timeout);
+  timeout = setTimeout(refreshinputs, 30000);
+}
+
+$(document).ready(function(){
+  resettimer;
+  $(this).mousemove(resettimer);
+  $(this).keypress(resettimer);
+  createTimeline();
+
+  $(".adv").hide();
+  $("#toggleadv").click(function(){
+    $(".adv").toggle();
+  });
+
+  refreshinputs();
 
   $("#btnSetTemp").click(function(){
     $.post(
@@ -44,7 +57,6 @@ $(document).ready(function(){
     $("#btnSnooze").show();
     $("#btnSnoozeC").hide();
   });
-
 
 });
 
