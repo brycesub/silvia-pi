@@ -163,7 +163,7 @@ def rest_server(dummy,state):
     state['snoozeon'] = False
     return True
 
-  @route('/allstats')
+  @get('/allstats')
   def allstats():
     return dict(state)
 
@@ -172,7 +172,7 @@ def rest_server(dummy,state):
     call(["reboot"])
     return '';
 
-  @route('/healthcheck')
+  @get('/healthcheck')
   def healthcheck():
     return 'OK'
 
