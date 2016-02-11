@@ -17,8 +17,8 @@ snooze = '07:00'
 sample_time = 0.1
 
 # PID Proportional, Integral, and Derivative values
-P = 3.3
-I = 0.15
+P = 3.5
+I = 0.2
 D = 12.5
 
 #Web/REST Server Options
