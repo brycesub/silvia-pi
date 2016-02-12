@@ -17,7 +17,7 @@ snooze = '07:00'
 sample_time = 0.1
 
 # PID Proportional, Integral, and Derivative values
-P = 3.5
+P = 4.0
 I = 0.2
 D = 12.5
 
