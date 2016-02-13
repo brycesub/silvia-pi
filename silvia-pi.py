@@ -22,7 +22,7 @@ def pid_loop(dummy,state):
 
   pid = PID.PID(conf.P,conf.I,conf.D)
   pid.SetPoint = state['settemp']
-  pid.setSampleTime(conf.sample_time)
+  pid.setSampleTime(conf.sample_time*5)
 
   nanct=0
   i=0
@@ -60,10 +60,11 @@ def pid_loop(dummy,state):
         pid.SetPoint = state['settemp']
         lastsettemp = state['settemp']
 
-      pid.update(avgtemp)
-      pidout = pid.output
-      pidhist[i%10] = pidout
-      avgpid = sum(pidhist)/len(pidhist)
+      if i%5 == 0 :
+        pid.update(avgtemp)
+        pidout = pid.output
+        pidhist[i/5%10] = pidout
+        avgpid = sum(pidhist)/len(pidhist)
 
       if state['snoozeon'] == False :
         if avgpid >= 100 :
