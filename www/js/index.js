@@ -28,10 +28,10 @@ function resettimer() {
 
 function onresize() {
     var h;
-    if ($(window).height()*.40 > 350 ) {
-      h = 350;
+    if ($(window).height()*.50 > 450 ) {
+      h = 450;
     } else {
-      h = $(window).height()*.40;
+      h = $(window).height()*.50;
     }
 
     $("#chart").attr("width", $("#fullrow").width()-30);
