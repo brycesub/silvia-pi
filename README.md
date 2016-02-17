@@ -13,7 +13,7 @@ A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing
 * Digital pressure gauge
 
 ####Dashboard
-<img src="http://i.imgur.com/NuzPAj7.gif" width=800 />
+<img src="https://github.com/brycesub/silvia-pi/blob/master/media/silvia_dashboard.gif" width=800 />
 
 ####Hardware
 * Raspberry Pi 2
