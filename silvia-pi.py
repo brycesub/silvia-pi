@@ -60,10 +60,10 @@ def pid_loop(dummy,state):
         pid.SetPoint = state['settemp']
         lastsettemp = state['settemp']
 
-      if i%5 == 0 :
+      if i%10 == 0 :
         pid.update(avgtemp)
         pidout = pid.output
-        pidhist[i/5%10] = pidout
+        pidhist[i/10%10] = pidout
         avgpid = sum(pidhist)/len(pidhist)
 
       if state['snoozeon'] == False :
