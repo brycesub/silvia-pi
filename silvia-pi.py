@@ -2,7 +2,7 @@
 
 def pid_loop(dummy,state):
   import sys
-  from time import sleep
+  from time import sleep, time
   from datetime import datetime, timedelta
   from math import isnan
   import Adafruit_GPIO as GPIO
@@ -33,6 +33,8 @@ def pid_loop(dummy,state):
   avgtemp = 0.
   hestat = 0
   lastsettemp = state['settemp']
+  lasttime = time()
+  sleeptime = 0
 
   try:
     while True : # Loops 10x/second
@@ -93,10 +95,14 @@ def pid_loop(dummy,state):
       state['dterm'] = round(pid.DTerm * conf.D,2)
       state['hestat'] = hestat
 
-      print state
+      print time(), state
 
+      sleeptime = lasttime+conf.sample_time-time()
+      if sleeptime < 0 :
+        sleeptime = 0
+      sleep(sleeptime)
+      lasttime = time()
       i += 1
-      sleep(conf.sample_time)
 
   finally:
     pid.clear
