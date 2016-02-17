@@ -44,7 +44,7 @@ A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing
     * Don't skimp here.  Remember this wire will be in close proximit to a ~240*F boiler
 
 ####Hardware Installation
-[Installation Instructions / Pictures](http://imgur.com/a/uxfRZ)
+[Installation Instructions / Pictures](http://imgur.com/a/3WLVt)
 
 ####Software
 * OS - Raspbian Jessie
