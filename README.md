@@ -12,6 +12,9 @@ A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing
 * Timed shots with pre-infusion
 * Digital pressure gauge
 
+####Dashboard
+<img src="http://i.imgur.com/NuzPAj7.gif" width=800 />
+
 ####Hardware
 * Raspberry Pi 2
   * $35 - http://www.amazon.com/Raspberry-Pi-Model-Project-Board/dp/B00T2U7R7I
