@@ -176,6 +176,11 @@ def rest_server(dummy,state):
     call(["reboot"])
     return '';
 
+  @route('/shutdown')
+  def shutdown():
+    call(["shutdown","-h","now"])
+    return '';
+
   @get('/healthcheck')
   def healthcheck():
     return 'OK'
