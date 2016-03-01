@@ -1,11 +1,56 @@
 #!/usr/bin/python
 
+def he_control_loop(dummy,state):
+  from time import sleep
+  from datetime import datetime, timedelta
+  import Adafruit_GPIO as GPIO
+  import config as conf
+
+  rGPIO = GPIO.get_platform_gpio()
+  rGPIO.setup(conf.he_pin, GPIO.OUT)
+  rGPIO.output(conf.he_pin,0)
+
+  heating = False
+
+  try:
+    while True:
+      if state['snoozeon'] == True :
+        now = datetime.now()
+        dt = datetime.strptime(state['snooze'],'%H:%M')
+        if dt.hour == now.hour and dt.minute == now.minute :
+          state['snoozeon'] = False
+
+      avgpid = state['avgpid']
+
+      if state['snoozeon']:
+        state['heating'] = False
+        rGPIO.output(conf.he_pin,0)
+        sleep(1)
+      else:
+        if avgpid >= 100 :
+          state['heating'] = True
+          rGPIO.output(conf.he_pin,1)
+          sleep(1)
+        elif avgpid > 0 and avgpid < 100 and state['tempf'] < state['settemp'] :
+          state['heating'] = True
+          rGPIO.output(conf.he_pin,1)
+          sleep(avgpid/100.)
+          rGPIO.output(conf.he_pin,0)
+          sleep(1-(avgpid/100.))
+          state['heating'] = False
+        else:
+          rGPIO.output(conf.he_pin,0)
+          state['heating'] = False
+          sleep(1)
+
+  finally:
+    rGPIO.output(conf.he_pin,0)
+    rGPIO.cleanup()
+
 def pid_loop(dummy,state):
   import sys
   from time import sleep, time
-  from datetime import datetime, timedelta
   from math import isnan
-  import Adafruit_GPIO as GPIO
   import Adafruit_GPIO.SPI as SPI
   import Adafruit_MAX31855.MAX31855 as MAX31855
   import PID as PID
@@ -16,11 +61,7 @@ def pid_loop(dummy,state):
 
   sensor = MAX31855.MAX31855(spi=SPI.SpiDev(conf.spi_port, conf.spi_dev))
 
-  rGPIO = GPIO.get_platform_gpio()
-  rGPIO.setup(conf.he_pin, GPIO.OUT)
-  rGPIO.output(conf.he_pin,0)
-
-  pid = PID.PID(conf.P,conf.I,conf.D)
+  pid = PID.PID(conf.Pcold,conf.Icold,conf.Dcold)
   pid.SetPoint = state['settemp']
   pid.setSampleTime(conf.sample_time*5)
 
@@ -31,36 +72,46 @@ def pid_loop(dummy,state):
   avgpid = 0.
   temphist = [0.,0.,0.,0.,0.]
   avgtemp = 0.
-  hestat = 0
   lastsettemp = state['settemp']
   lasttime = time()
   sleeptime = 0
+  lastcold = 0
+  iscold = True
 
   try:
     while True : # Loops 10x/second
-      if state['snoozeon'] == True :
-        now = datetime.now()
-        dt = datetime.strptime(state['snooze'],'%H:%M')
-        if dt.hour == now.hour and dt.minute == now.minute :
-          state['snoozeon'] = False
-
       tempc = sensor.readTempC()
-      tempf = c_to_f(tempc)
-      temphist[i%5] = tempf
-      avgtemp = sum(temphist)/len(temphist)
-
       if isnan(tempc) :
         nanct += 1
         if nanct > 100000 :
-          rGPIO.output(conf.he_pin,0)
-          break
+          sys.exit
         continue
       else:
         nanct = 0
 
+      tempf = c_to_f(tempc)
+      temphist[i%5] = tempf
+      avgtemp = sum(temphist)/len(temphist)
+
       if state['settemp'] != lastsettemp :
         pid.SetPoint = state['settemp']
         lastsettemp = state['settemp']
+
+      if avgtemp < 140:
+        lastcold = i
+
+      #if i-(60/conf.sample_time*15) > lastcold:
+      #  #machine is warm
+      #  pid.setKp(conf.Pwarm)
+      #  pid.setKi(conf.Iwarm)
+      #  pid.setKd(conf.Dwarm)
+      #  iscold = False
+      #else:
+      #  #machine is cold
+      #  pid.setKp(conf.Pcold)
+      #  pid.setKi(conf.Icold)
+      #  pid.setKd(conf.Dcold)
+      #  iscold = True
 
       if i%10 == 0 :
         pid.update(avgtemp)
@@ -68,32 +119,18 @@ def pid_loop(dummy,state):
         pidhist[i/10%10] = pidout
         avgpid = sum(pidhist)/len(pidhist)
 
-      if state['snoozeon'] == False :
-        if avgpid >= 100 :
-          hestat = 1
-        elif avgpid > 0 and avgpid < 100 and tempf < conf.set_temp :
-          if i%10 == 0 :
-            j=int((avgpid/10)+.5)
-          if i%10 < j :
-            hestat = 1
-          else :
-            hestat = 0
-        else:
-          hestat = 0
-      else:
-        hestat = 0
-
-      rGPIO.output(conf.he_pin,hestat) 
-
       state['i'] = i
       state['tempf'] = round(tempf,2)
       state['avgtemp'] = round(avgtemp,2)
       state['pidval'] = round(pidout,2)
       state['avgpid'] = round(avgpid,2)
       state['pterm'] = round(pid.PTerm,2)
-      state['iterm'] = round(pid.ITerm * conf.I,2)
-      state['dterm'] = round(pid.DTerm * conf.D,2)
-      state['hestat'] = hestat
+      if iscold:
+        state['iterm'] = round(pid.ITerm * conf.Icold,2)
+        state['dterm'] = round(pid.DTerm * conf.Dcold,2)
+      else:
+        state['iterm'] = round(pid.ITerm * conf.Iwarm,2)
+        state['dterm'] = round(pid.DTerm * conf.Dwarm,2)
 
       print time(), state
 
@@ -101,13 +138,11 @@ def pid_loop(dummy,state):
       if sleeptime < 0 :
         sleeptime = 0
       sleep(sleeptime)
-      lasttime = time()
       i += 1
+      lasttime = time()
 
   finally:
     pid.clear
-    rGPIO.output(conf.he_pin,0)
-    rGPIO.cleanup()
 
 def rest_server(dummy,state):
   from bottle import route, run, get, post, request, static_file, abort
@@ -199,10 +234,15 @@ if __name__ == '__main__':
   pidstate['snoozeon'] = False
   pidstate['i'] = 0
   pidstate['settemp'] = conf.set_temp
+  pidstate['avgpid'] = 0.
 
   p = Process(target=pid_loop,args=(1,pidstate))
   p.daemon = True
   p.start()
+
+  h = Process(target=he_control_loop,args=(1,pidstate))
+  h.daemon = True
+  h.start()
 
   r = Process(target=rest_server,args=(1,pidstate))
   r.daemon = True
@@ -217,7 +257,7 @@ if __name__ == '__main__':
   lasti = pidstate['i']
   sleep(1)
 
-  while True:
+  while True: 
     curi = pidstate['i']
     if curi == lasti :
       piderr = piderr + 1
