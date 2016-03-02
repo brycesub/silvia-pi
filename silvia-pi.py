@@ -3,12 +3,12 @@
 def he_control_loop(dummy,state):
   from time import sleep
   from datetime import datetime, timedelta
-  import Adafruit_GPIO as GPIO
+  import RPi.GPIO as GPIO
   import config as conf
 
-  rGPIO = GPIO.get_platform_gpio()
-  rGPIO.setup(conf.he_pin, GPIO.OUT)
-  rGPIO.output(conf.he_pin,0)
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setup(conf.he_pin, GPIO.OUT)
+  GPIO.output(conf.he_pin,0)
 
   heating = False
 
@@ -24,28 +24,28 @@ def he_control_loop(dummy,state):
 
       if state['snoozeon']:
         state['heating'] = False
-        rGPIO.output(conf.he_pin,0)
+        GPIO.output(conf.he_pin,0)
         sleep(1)
       else:
         if avgpid >= 100 :
           state['heating'] = True
-          rGPIO.output(conf.he_pin,1)
+          GPIO.output(conf.he_pin,1)
           sleep(1)
         elif avgpid > 0 and avgpid < 100 and state['tempf'] < state['settemp']+1 :
           state['heating'] = True
-          rGPIO.output(conf.he_pin,1)
+          GPIO.output(conf.he_pin,1)
           sleep(avgpid/100.)
-          rGPIO.output(conf.he_pin,0)
+          GPIO.output(conf.he_pin,0)
           sleep(1-(avgpid/100.))
           state['heating'] = False
         else:
-          rGPIO.output(conf.he_pin,0)
+          GPIO.output(conf.he_pin,0)
           state['heating'] = False
           sleep(1)
 
   finally:
-    rGPIO.output(conf.he_pin,0)
-    rGPIO.cleanup()
+    GPIO.output(conf.he_pin,0)
+    GPIO.cleanup()
 
 def pid_loop(dummy,state):
   import sys
