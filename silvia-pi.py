@@ -31,7 +31,7 @@ def he_control_loop(dummy,state):
           state['heating'] = True
           rGPIO.output(conf.he_pin,1)
           sleep(1)
-        elif avgpid > 0 and avgpid < 100 and state['tempf'] < state['settemp'] :
+        elif avgpid > 0 and avgpid < 100 and state['tempf'] < state['settemp']+1 :
           state['heating'] = True
           rGPIO.output(conf.he_pin,1)
           sleep(avgpid/100.)
