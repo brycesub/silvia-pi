@@ -1,0 +1,4 @@
+bottle
+CherryPy
+RPi.GPIO
+spidev
