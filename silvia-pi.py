@@ -62,7 +62,7 @@ def pid_loop(dummy,state):
 
   sensor = MAX31855.MAX31855(spi=SPI.SpiDev(conf.spi_port, conf.spi_dev))
 
-  pid = PID.PID(conf.Pcold,conf.Icold,conf.Dcold)
+  pid = PID.PID(conf.P,conf.I,conf.D)
   pid.SetPoint = state['settemp']
   pid.setSampleTime(conf.sample_time*5)
 
@@ -76,8 +76,6 @@ def pid_loop(dummy,state):
   lastsettemp = state['settemp']
   lasttime = time()
   sleeptime = 0
-  lastcold = 0
-  iscold = True
 
   try:
     while True : # Loops 10x/second
@@ -98,22 +96,6 @@ def pid_loop(dummy,state):
         pid.SetPoint = state['settemp']
         lastsettemp = state['settemp']
 
-      if avgtemp < 140:
-        lastcold = i
-
-      #if i-(60/conf.sample_time*15) > lastcold:
-      #  #machine is warm
-      #  pid.setKp(conf.Pwarm)
-      #  pid.setKi(conf.Iwarm)
-      #  pid.setKd(conf.Dwarm)
-      #  iscold = False
-      #else:
-      #  #machine is cold
-      #  pid.setKp(conf.Pcold)
-      #  pid.setKi(conf.Icold)
-      #  pid.setKd(conf.Dcold)
-      #  iscold = True
-
       if i%10 == 0 :
         pid.update(avgtemp)
         pidout = pid.output
@@ -126,12 +108,8 @@ def pid_loop(dummy,state):
       state['pidval'] = round(pidout,2)
       state['avgpid'] = round(avgpid,2)
       state['pterm'] = round(pid.PTerm,2)
-      if iscold:
-        state['iterm'] = round(pid.ITerm * conf.Icold,2)
-        state['dterm'] = round(pid.DTerm * conf.Dcold,2)
-      else:
-        state['iterm'] = round(pid.ITerm * conf.Iwarm,2)
-        state['dterm'] = round(pid.DTerm * conf.Dwarm,2)
+      state['iterm'] = round(pid.ITerm * conf.I,2)
+      state['dterm'] = round(pid.DTerm * conf.D,2)
 
       print time(), state
 
@@ -258,7 +236,7 @@ if __name__ == '__main__':
   lasti = pidstate['i']
   sleep(1)
 
-  while True: 
+  while p.is_alive() and h.is_alive() and r.is_alive():
     curi = pidstate['i']
     if curi == lasti :
       piderr = piderr + 1
@@ -270,9 +248,6 @@ if __name__ == '__main__':
     if piderr > 9 :
       print 'ERROR IN PID THREAD, RESTARTING'
       p.terminate()
-      sleep(60)
-      p.run()
-      sleep(2)
 
     try:
       hc = urlopen(urlhc,timeout=2)
@@ -288,9 +263,6 @@ if __name__ == '__main__':
     if weberr > 9 :
       print 'ERROR IN WEB SERVER THREAD, RESTARTING'
       r.terminate()
-      sleep(2)
-      r.run()
-      sleep(2)
 
     weberrflag = 0
 
