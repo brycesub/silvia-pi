@@ -63,7 +63,7 @@ $(document).ready(function(){
 
   refreshinputs();
 
-  $("#btnSetTemp").click(function(){
+  $("#inputSetTemp").change(function(){
     $.post(
       "/settemp", 
       { settemp: $("#inputSetTemp").val() } 
