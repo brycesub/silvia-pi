@@ -17,13 +17,9 @@ snooze = '07:00'
 sample_time = 0.1
 
 # PID Proportional, Integral, and Derivative values
-Pcold = 3.6
-Icold = 0.3
-Dcold = 25.0
-
-Pwarm = 3.0
-Iwarm = 0.1
-Dwarm = 18.0
+P = 3.6
+I = 0.3
+D = 25.0
 
 #Web/REST Server Options
 port = 8080
