@@ -17,9 +17,13 @@ snooze = '07:00'
 sample_time = 0.1
 
 # PID Proportional, Integral, and Derivative values
-P = 3.3
-I = 0.3
-D = 25.0
+Pc = 3.5
+Ic = 0.3
+Dc = 25.0
+
+Pw = 2.3
+Iw = 0.3
+Dw = 18.0
 
 #Web/REST Server Options
 port = 8080
