@@ -62,7 +62,7 @@ def pid_loop(dummy,state):
 
   sensor = MAX31855.MAX31855(spi=SPI.SpiDev(conf.spi_port, conf.spi_dev))
 
-  pid = PID.PID(conf.P,conf.I,conf.D)
+  pid = PID.PID(conf.Pc,conf.Ic,conf.Dc)
   pid.SetPoint = state['settemp']
   pid.setSampleTime(conf.sample_time*5)
 
@@ -76,6 +76,8 @@ def pid_loop(dummy,state):
   lastsettemp = state['settemp']
   lasttime = time()
   sleeptime = 0
+  iscold = True
+  lastcold = 0
 
   try:
     while True : # Loops 10x/second
@@ -91,6 +93,20 @@ def pid_loop(dummy,state):
       tempf = c_to_f(tempc)
       temphist[i%5] = tempf
       avgtemp = sum(temphist)/len(temphist)
+
+      if avgtemp < 120 :
+        lastcold = i
+
+      if (i-lastcold)*conf.sample_time > 60*15 :
+        pid.setKp = conf.Pw
+        pid.setKi = conf.Iw
+        pid.setKd = conf.Dw
+        iscold = False
+      else:
+        pid.setKp = conf.Pc
+        pid.setKi = conf.Ic
+        pid.setKd = conf.Dc
+        iscold = True
 
       if state['settemp'] != lastsettemp :
         pid.SetPoint = state['settemp']
@@ -108,8 +124,13 @@ def pid_loop(dummy,state):
       state['pidval'] = round(pidout,2)
       state['avgpid'] = round(avgpid,2)
       state['pterm'] = round(pid.PTerm,2)
-      state['iterm'] = round(pid.ITerm * conf.I,2)
-      state['dterm'] = round(pid.DTerm * conf.D,2)
+      if iscold :
+        state['iterm'] = round(pid.ITerm * conf.Ic,2)
+        state['dterm'] = round(pid.DTerm * conf.Dc,2)
+      else :
+        state['iterm'] = round(pid.ITerm * conf.Iw,2)
+        state['dterm'] = round(pid.DTerm * conf.Dw,2)
+      state['iscold'] = iscold
 
       print time(), state
 
