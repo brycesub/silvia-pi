@@ -78,9 +78,10 @@ It also creates an entry in /etc/rc.local to start the software on every boot.
 #####GET /allstats
 Returns JSON of all the following statistics:
 * i : Current loop iterator value (increases 10x per second)
-* tempf : Temperature in Fahrenheit
-* avgtemp : Average temperature over the last 10 cycles (1 second) in Fahrenheit
-* settemp : Current set (goal) temperature in Fahrenheit
+* tempf : Temperature in °F
+* avgtemp : Average temperature over the last 10 cycles (1 second) in °F
+* settemp : Current set (goal) temperature in °F
+* iscold : True if the temp was <120°F in the last 15 minutes
 * hestat : 0 if heating element is currently off, 1 if heating element is currently on
 * pidval : PID output from the last cycle
 * avgpid : Average PID output over the last 10 cycles (1 second)
@@ -91,14 +92,14 @@ Returns JSON of all the following statistics:
 * snoozeon : true if machine is currently snoozing, false if machine is not snoozing
 
 #####GET /curtemp
-Returns string of the current temperature in Fahrenheit.
+Returns string of the current temperature in °F
 
 #####GET /settemp
-Returns string of the current set (goal) temperature in Fahrenheit.
+Returns string of the current set (goal) temperature in °F
 
 #####POST /settemp
 Expects one input 'settemp' with a value between 200-260.  
-Sets the set (goal) temperature in Fahrenheit.  
+Sets the set (goal) temperature in °F
 Returns the set temp back or a 400 error if unsuccessful.
 
 #####GET /snooze
