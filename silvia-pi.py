@@ -31,7 +31,6 @@ def he_control_loop(dummy,state):
           state['heating'] = True
           GPIO.output(conf.he_pin,1)
           sleep(1)
-        #elif avgpid > 0 and avgpid < 100 and state['tempf'] < state['settemp']+1 :
         elif avgpid > 0 and avgpid < 100:
           state['heating'] = True
           GPIO.output(conf.he_pin,1)
@@ -77,7 +76,9 @@ def pid_loop(dummy,state):
   lasttime = time()
   sleeptime = 0
   iscold = True
+  iswarm = False
   lastcold = 0
+  lastwarm = 0
 
   try:
     while True : # Loops 10x/second
@@ -94,18 +95,22 @@ def pid_loop(dummy,state):
       temphist[i%5] = tempf
       avgtemp = sum(temphist)/len(temphist)
 
-      if avgtemp < 120 :
+      if avgtemp < 100 :
         lastcold = i
 
-      if (i-lastcold)*conf.sample_time > 60*15 :
-        pid.setKp = conf.Pw
-        pid.setKi = conf.Iw
-        pid.setKd = conf.Dw
+      if avgtemp > 200 :
+        lastwarm = i
+
+      if iscold and (i-lastcold)*conf.sample_time > 60*15 :
+        pid = PID.PID(conf.Pw,conf.Iw,conf.Dw)
+        pid.SetPoint = state['settemp']
+        pid.setSampleTime(conf.sample_time*5)
         iscold = False
-      else:
-        pid.setKp = conf.Pc
-        pid.setKi = conf.Ic
-        pid.setKd = conf.Dc
+
+      if iswarm and (i-lastwarm)*conf.sample_time > 60*15 : 
+        pid = PID.PID(conf.Pc,conf.Ic,conf.Dc)
+        pid.SetPoint = state['settemp']
+        pid.setSampleTime(conf.sample_time*5)
         iscold = True
 
       if state['settemp'] != lastsettemp :
