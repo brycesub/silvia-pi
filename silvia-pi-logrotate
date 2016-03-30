@@ -2,6 +2,7 @@
   rotate 7
   daily
   compress
+  copytruncate
   missingok
   notifempty
 }
