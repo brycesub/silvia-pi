@@ -1,6 +1,6 @@
 /root/silvia-pi/silvia-pi.log {
-  rotate 9
-  weekly
+  rotate 7
+  daily
   compress
   missingok
   notifempty
