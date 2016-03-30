@@ -5,7 +5,10 @@ if [[ $(whoami) -ne 'root' ]]; then
   exit -1
 fi
 
-apt-get -y install rpi-update git build-essential python-dev python-smbus python-pip
+apt-get -y install rpi-update git build-essential python-dev python-smbus python-pip logrotate
+
+echo "Installing logrotate config..."
+cp silvia-pi.logrotate /etc/logrotate.d
 
 echo "Installing Adafruit GPIO library..."
 cd ~
