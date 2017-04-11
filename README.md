@@ -1,21 +1,21 @@
-#silvia-pi
+# silvia-pi
 A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing PID temperature control.
 
-####Currently Implemented Features:
+#### Currently Implemented Features:
 * Brew temperature control
 * RESTful API
 * Web interface for displaying temperature and other statistics
 * Programmable machine warm-up/wake-up
 
-####Planned Features:
+#### Planned Features:
 * Steam temperature control
 * Timed shots with pre-infusion
 * Digital pressure gauge
 
-####Dashboard
+#### Dashboard
 <img src="https://github.com/brycesub/silvia-pi/blob/master/media/silvia_dashboard.gif" width=800 />
 
-####Hardware
+#### Hardware
 * Raspberry Pi 2
   * $35 - http://www.amazon.com/Raspberry-Pi-Model-Project-Board/dp/B00T2U7R7I
   * $5 - Raspberry Pi Zero should work too
@@ -43,17 +43,17 @@ A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing
   * $5 - Hardware Store / Scrap
     * Don't skimp here.  Remember this wire will be in close proximit to a ~240*F boiler
 
-####Hardware Installation
+#### Hardware Installation
 [Installation Instructions / Pictures](http://imgur.com/a/3WLVt)
 
-####Software
+#### Software
 * OS - Raspbian Jessie
   * Full - https://downloads.raspberrypi.org/raspbian_latest
   * Lite (for smaller SD Cards) - https://downloads.raspberrypi.org/raspbian_lite_latest
 
 Install Raspbian and configure Wi-Fi and timezone.
 
-####silvia-pi Software Installation Instructions
+#### silvia-pi Software Installation Instructions
 Execute on the pi bash shell:
 ````
 sudo apt-get -y update
@@ -73,9 +73,9 @@ This last step will download the necessariy python libraries and install the sil
 
 It also creates an entry in /etc/rc.local to start the software on every boot.
 
-####API Documentation
+#### API Documentation
 
-#####GET /allstats
+##### GET /allstats
 Returns JSON of all the following statistics:
 * i : Current loop iterator value (increases 10x per second)
 * tempf : Temperature in °F
@@ -91,33 +91,33 @@ Returns JSON of all the following statistics:
 * snooze : Current or last snooze time, a string in the format HH:MM (24 hour)
 * snoozeon : true if machine is currently snoozing, false if machine is not snoozing
 
-#####GET /curtemp
+##### GET /curtemp
 Returns string of the current temperature in °F
 
-#####GET /settemp
+##### GET /settemp
 Returns string of the current set (goal) temperature in °F
 
-#####POST /settemp
+##### POST /settemp
 Expects one input 'settemp' with a value between 200-260.  
 Sets the set (goal) temperature in °F
 Returns the set temp back or a 400 error if unsuccessful.
 
-#####GET /snooze
+##### GET /snooze
 Returns string of the current or last snooze time formatted "HH:MM" (24 hour).  
 e.g. 13:00 if snoozing until 1:00 PM local time.
 
-#####POST /snooze
+##### POST /snooze
 Expects one input 'snooze', a string in the format "HH:MM" (24 hour).  
 This enables the snooze function, the machine will sleep until the time specified.  
 Returns the snooze time set or 400 if passed an invalid input.
 
-#####POST /resetsnooze
+##### POST /resetsnooze
 Disables/cancels the current snooze functionality.  
 Returns true always.
 
-#####GET /restart
+##### GET /restart
 Issues a reboot command to the Raspberry Pi.
 
-#####GET /healthcheck
+##### GET /healthcheck
 A simple healthcheck to see if the webserver thread is repsonding.  
 Returns string 'OK'.
