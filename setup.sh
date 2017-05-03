@@ -27,8 +27,8 @@ cd ~
 git clone https://github.com/ivmech/ivPID.git
 cp ~/ivPID/PID.py ~/silvia-pi/
 
-echo "Installing cherrypy microframework"
-pip install cherrypy
+echo "Installing remaining python libraries..."
+pip install --upgrade -r requirements.txt
 
 echo "Adding entry to /etc/rc.local"
 cp /etc/rc.local /etc/rc.local.bak
