@@ -1,4 +1,4 @@
 bottle
-CherryPy
+cheroot
 RPi.GPIO
 spidev
