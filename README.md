@@ -46,6 +46,11 @@ A Raspberry Pi modification to the Rancilio Silvia Espresso Machine implementing
 #### Hardware Installation
 [Installation Instructions / Pictures](http://imgur.com/a/3WLVt)
 
+#### Circuit Diagram
+High-level circuit diagram:
+
+![Circuit Diagram](media/circuit.png?raw=true "Circuit Diagram")
+
 #### Software
 * OS - Raspbian Jessie
   * Full - https://downloads.raspberrypi.org/raspbian_latest
