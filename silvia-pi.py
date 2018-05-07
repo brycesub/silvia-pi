@@ -1,8 +1,65 @@
 #!/usr/bin/python
 
+def scheduler(dummy,state):
+  import time
+  import sys
+  import schedule
+  from datetime import datetime
+
+  sys.stdout = open("scheduler.log", "a", buffering=0)
+  sys.stderr = open("scheduler.err.log", "a", buffering=0)
+
+  print "Starting scheduler thread ..."
+
+  last_wake = 0
+  last_sleep = 0
+  last_sched_switch = 0
+
+  while True:
+
+    if last_wake != state['wake_time'] or last_sleep != state['sleep_time'] or last_sched_switch != state['sched_enabled']:
+      schedule.clear()
+
+      if state['sched_enabled'] == True:
+        schedule.every().day.at(state['sleep_time']).do(gotosleep,1,state)
+        schedule.every().day.at(state['wake_time']).do(wakeup,1,state)
+
+        nowtm = float(datetime.now().hour) + float(datetime.now().minute)/60.
+        sleeptm = state['sleep_time'].split(":")
+        sleeptm = float(sleeptm[0]) + float(sleeptm[1])/60.
+        waketm = state['wake_time'].split(":")
+        waketm = float(waketm[0]) + float(waketm[1])/60.
+
+        if waketm < sleeptm:
+          if nowtm >= waketm and nowtm < sleeptm:
+            wakeup(1,state)
+          else:
+            gotosleep(1,state)
+        elif waketm > sleeptm:
+          if nowtm < waketm and nowtm >= sleeptm:
+            gotosleep(1,state)
+          else:
+            wakeup(1,state)
+
+      else:
+        wakeup(1,state)
+
+    last_wake = state['wake_time']
+    last_sleep = state['sleep_time']
+    last_sched_switch = state['sched_enabled']
+
+    schedule.run_pending()
+
+    time.sleep(1)
+
+def wakeup(dummy,state):
+  state['is_awake'] = True
+
+def gotosleep(dummy,state):
+  state['is_awake'] = False
+
 def he_control_loop(dummy,state):
   from time import sleep
-  from datetime import datetime, timedelta
   import RPi.GPIO as GPIO
   import config as conf
 
@@ -14,15 +71,9 @@ def he_control_loop(dummy,state):
 
   try:
     while True:
-      if state['snoozeon'] == True :
-        now = datetime.now()
-        dt = datetime.strptime(state['snooze'],'%H:%M')
-        if dt.hour == now.hour and dt.minute == now.minute :
-          state['snoozeon'] = False
-
       avgpid = state['avgpid']
 
-      if state['snoozeon']:
+      if state['is_awake'] == False :
         state['heating'] = False
         GPIO.output(conf.he_pin,0)
         sleep(1)
@@ -55,6 +106,9 @@ def pid_loop(dummy,state):
   import Adafruit_MAX31855.MAX31855 as MAX31855
   import PID as PID
   import config as conf
+
+  sys.stdout = open("pid.log", "a", buffering=0)
+  sys.stderr = open("pid.err.log", "a", buffering=0)
 
   def c_to_f(c):
     return c * 9.0 / 5.0 + 32.0
@@ -187,25 +241,40 @@ def rest_server(dummy,state):
     except:
       abort(400,'Invalid number for set temp.')
 
-  @get('/snooze')
-  def get_snooze():
-    return str(state['snooze'])
+  @get('/is_awake')
+  def get_is_awake():
+    return str(state['is_awake'])
 
-  @post('/snooze')
-  def post_snooze():
-    snooze = request.forms.get('snooze')
+  @post('/scheduler')
+  def set_sched():
+    sched = request.forms.get('scheduler')
+    if sched == "True":
+      state['sched_enabled'] = True
+    elif sched == "False":
+      state['sched_enabled'] = False
+      state['is_awake'] = True
+    else:
+      abort(400,'Invalid scheduler setting. Expecting True or False')
+
+  @post('/setwake')
+  def set_wake():
+    wake = request.forms.get('wake')
     try:
-      datetime.strptime(snooze,'%H:%M')
+      datetime.strptime(wake,'%H:%M')
     except:
       abort(400,'Invalid time format.')
-    state['snoozeon'] = True
-    state['snooze'] = snooze
-    return str(snooze)
+    state['wake_time'] = wake
+    return str(wake)
 
-  @post('/resetsnooze')
-  def reset_snooze():
-    state['snoozeon'] = False
-    return True
+  @post('/setsleep')
+  def set_sleep():
+    sleep = request.forms.get('sleep')
+    try:
+      datetime.strptime(sleep,'%H:%M')
+    except:
+      abort(400,'Invalid time format.')
+    state['sleep_time'] = sleep
+    return str(sleep)
 
   @get('/allstats')
   def allstats():
@@ -235,25 +304,36 @@ if __name__ == '__main__':
 
   manager = Manager()
   pidstate = manager.dict()
-  pidstate['snooze'] = conf.snooze 
-  pidstate['snoozeon'] = False
+  pidstate['is_awake'] = True
+  pidstate['sched_enabled'] = conf.sched_enabled
+  pidstate['sleep_time'] = conf.sleep_time
+  pidstate['wake_time'] = conf.wake_time
   pidstate['i'] = 0
   pidstate['settemp'] = conf.set_temp
   pidstate['avgpid'] = 0.
 
+  print "Starting Scheduler thread..."
+  s = Process(target=scheduler,args=(1,pidstate))
+  s.daemon = True
+  s.start()
+
+  print "Starting PID thread..."
   p = Process(target=pid_loop,args=(1,pidstate))
   p.daemon = True
   p.start()
 
+  print "Starting HE Control thread..."
   h = Process(target=he_control_loop,args=(1,pidstate))
   h.daemon = True
   h.start()
 
+  print "Starting REST Server thread..."
   r = Process(target=rest_server,args=(1,pidstate))
   r.daemon = True
   r.start()
 
   #Start Watchdog loop
+  print "Starting Watchdog..."
   piderr = 0
   weberr = 0
   weberrflag = 0
@@ -262,7 +342,7 @@ if __name__ == '__main__':
   lasti = pidstate['i']
   sleep(1)
 
-  while p.is_alive() and h.is_alive() and r.is_alive():
+  while p.is_alive() and h.is_alive() and r.is_alive() and s.is_alive():
     curi = pidstate['i']
     if curi == lasti :
       piderr = piderr + 1
