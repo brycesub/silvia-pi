@@ -16,7 +16,8 @@ function refreshinputs() {
     timeout: 500,
     success: function ( resp ) {
       $("#inputSetTemp").val( resp.settemp );
-      $("#inputSnooze").val( resp.snooze );
+      $("#inputSleep").val( resp.sleep_time );
+      $("#inputWake").val( resp.wake_time );
     }
   });
 }
@@ -70,16 +71,38 @@ $(document).ready(function(){
     );
   });
 
-  $("#btnSnooze").click(function(){
-    $.post("/snooze",{ snooze: $("#inputSnooze").val() });
-    $("#btnSnooze").hide();
-    $("#btnSnoozeC").show();
+  $("#inputSleep").change(function(){
+    $.post(
+      "/setsleep",
+      { sleep: $("#inputSleep").val() }
+    );
   });
 
-  $("#btnSnoozeC").click(function(){
-    $.post("/resetsnooze");
-    $("#btnSnooze").show();
-    $("#btnSnoozeC").hide();
+  $("#inputWake").change(function(){
+    $.post(
+      "/setwake",
+      { wake: $("#inputWake").val() }
+    );
+  });
+
+  $("#btnTimerDisable").click(function(){
+    $.post("/scheduler",{ scheduler: "False" });
+    $("#inputWake").hide();
+    $("#labelWake").hide();
+    $("#inputSleep").hide();
+    $("#labelSleep").hide();
+    $("#btnTimerDisable").hide();
+    $("#btnTimerEnable").show();
+  });
+
+  $("#btnTimerEnable").click(function(){
+    $.post("/scheduler",{ scheduler: "True" });
+    $("#inputWake").show();
+    $("#labelWake").show();
+    $("#inputSleep").show();
+    $("#labelSleep").show();
+    $("#btnTimerDisable").show();
+    $("#btnTimerEnable").hide();
   });
 
 });
@@ -90,12 +113,18 @@ setInterval(function() {
       url: "/allstats",
       timeout: 500,
       success: function ( resp ) {
-        if (resp.snoozeon == true) {
-          $("#btnSnooze").hide();
-          $("#btnSnoozeC").show();
+        if (resp.sched_enabled == true) {
+         $("#inputWake").show();
+         $("#inputSleep").show();
+         $("#btnTimerSet").show();
+         $("#btnTimerDisable").show();
+         $("#btnTimerEnable").hide();
         } else {
-          $("#btnSnooze").show();
-          $("#btnSnoozeC").hide();
+         $("#inputWake").hide();
+         $("#inputSleep").hide();
+         $("#btnTimerSet").hide();
+         $("#btnTimerDisable").hide();
+         $("#btnTimerEnable").show();
         }
         curtemp.append(new Date().getTime(), resp.tempf);
         settemp.append(new Date().getTime(), resp.settemp);

@@ -6,3 +6,21 @@
   missingok
   notifempty
 }
+
+/root/silvia-pi/scheduler.log {
+  rotate 7
+  daily
+  compress
+  copytruncate
+  missingok
+  notifempty
+}
+
+/root/silvia-pi/pid.log {
+  rotate 7
+  daily
+  compress
+  copytruncate
+  missingok
+  notifempty
+}
