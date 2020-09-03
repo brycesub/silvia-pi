@@ -5,13 +5,13 @@ spi_port = 0
 spi_dev = 0
 
 # Pin # for relay connected to heating element
-he_pin = 26
+he_pin = 7
 
 # Default goal temperature
-set_temp = 221.
+set_temp = 100.
 
 # Default sleep/wake times
-sched_enabled = True
+sched_enabled = False
 wake_time = '06:30'
 sleep_time = '10:00'
 

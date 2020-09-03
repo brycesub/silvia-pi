@@ -3,3 +3,5 @@ cheroot
 RPi.GPIO
 spidev
 schedule
+Adafruit-Blinka
+adafruit-circuitpython-max31855
